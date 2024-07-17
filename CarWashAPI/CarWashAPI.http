@@ -1,0 +1,6 @@
+@CarWashAPI_HostAddress = http://localhost:5160
+
+GET {{CarWashAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

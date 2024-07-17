@@ -1,0 +1,43 @@
+<span id="heading">Sign Up Now!</span>
+<div class="signupForm">
+    <div id="icon">
+      <fa-icon id="userIcon" [icon]="user"></fa-icon>
+    </div>
+   
+    <!-- Form -->
+    <form #signupForm="ngForm" (ngSubmit) = "register(signupForm)" ngNativeValidate>
+         
+        <!-- EMAIL INPUT --> 
+        <div class="form-group mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" class="form-control" id="email" name ="email" ngModel required>
+          <small class="text-danger" > {{emailError}}</small> 
+        </div>
+
+        <!-- PASSWORD INPUT --> 
+        <div class="form-group mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" ngModel required>
+         <small class="text-danger"> {{passwordError}}</small> 
+          <!-- <div class="input-group-append">
+            <span class="input-group-text"><a #textpass (click)="showpass(pass,textpass)">Show</a></span>
+          </div>   -->
+        </div>
+
+        <!-- ROLE INPUT --> 
+        <div class="form-group mb-3">
+          <label for="role" class="form-label">Who are you? (Select One)</label>
+          <select class="form-control" id="role" name="role" [(ngModel)]="selected" required >
+            <option value="Customer">Customer</option>
+            <option value="Washer">Washer</option>
+          </select>
+        </div>
+       
+        <button type="submit" class="btn btn-primary">Create Account</button> &nbsp;
+        <small>Already have an account? <a role="button" routerLink='/login'>Login</a></small>
+    </form>
+     
+    <div *ngIf= "showMessage" class="message">
+      <p>{{succcessMsg}}</p>
+    </div>
+</div>

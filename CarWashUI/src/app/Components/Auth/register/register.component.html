@@ -1,0 +1,58 @@
+<div class="registerForm">
+  
+    <!-- Form -->
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+    
+      <!-- NAME INPUT -->
+      <div class="form-group mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" formControlName="name">
+        <small class="text-danger" *ngIf="registerForm.get('name')!.touched && registerForm.get('name')!.invalid">
+          Name is required.
+        </small>
+      </div>
+    
+      <!-- EMAIL INPUT -->
+      <div class="form-group mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" formControlName="email">
+        <small class="text-danger" *ngIf="registerForm.get('email')!.touched && registerForm.get('email')!.invalid">
+          Invalid email address.
+        </small>
+      </div>
+    
+      <!-- PASSWORD INPUT -->
+      <div class="form-group mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" formControlName="password">
+        <small class="text-danger" *ngIf="registerForm.get('password')!.touched && registerForm.get('password')!.invalid">
+          Password must be at least 6 characters long.
+        </small>
+      </div>
+    
+      <!-- PHONE NUMBER INPUT -->
+      <div class="form-group mb-3">
+        <label for="phoneNumber" class="form-label">Phone Number</label>
+        <input type="text" class="form-control" id="phoneNumber" formControlName="phoneNumber">
+        <small class="text-danger" *ngIf="registerForm.get('phoneNumber')!.touched && registerForm.get('phoneNumber')!.invalid">
+          Invalid phone number.
+        </small>
+      </div>
+    
+      <!-- ROLE INPUT -->
+      <div class="form-group mb-3">
+        <label for="role" class="form-label">Role</label>
+        <select class="form-control" id="role" formControlName="role">
+          <option value="Admin">Admin</option>
+          <option value="User">User</option>
+          <option value="Washer">Washer</option>
+        </select>
+        <small class="text-danger" *ngIf="registerForm.get('role')!.touched && registerForm.get('role')!.invalid">
+          Role must be either Admin, Customer, or Washer.
+        </small>
+      </div>
+    
+      <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+  </div>
+  

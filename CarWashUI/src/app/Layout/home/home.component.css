@@ -1,0 +1,51 @@
+.home {
+  height: 83vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+}
+
+.car {
+  width: 80%;
+  height: 80%;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(../../../assets/images/carwash.jpg);
+  background-size: cover;
+  background-position: center;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.cta-button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: #ff4757;
+}

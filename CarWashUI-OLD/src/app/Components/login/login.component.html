@@ -1,0 +1,35 @@
+<span id="heading">LOGIN NOW!</span>
+<div class="loginForm">
+  <!-- Form -->
+  <form #loginForm="ngForm" (ngSubmit) = "login(loginForm)" ngNativeValidate>
+       
+      <!-- EMAIL INPUT --> 
+      <div class="form-group mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" name ="email" ngModel required>
+        <small class="text-danger" > {{emailError}}</small>
+      </div>
+
+      <!-- PASSWORD INPUT --> 
+      <div class="form-group mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" name="password" ngModel required>
+        <small class="text-danger"> {{passwordError}}</small>
+        <!-- <div class="input-group-append">
+          <span class="input-group-text"><a #textpass (click)="showpass(pass,textpass)">Show</a></span>
+        </div>   -->
+      </div>
+
+       <!-- ROLE INPUT --> 
+       <div class="form-group mb-3">
+        <label for="role" class="form-label">Who are you? (Select One)</label>
+        <select class="form-control" id="role" name="role" [(ngModel)]="selected" required >
+          <option value="Customer">Customer</option>
+          <option value="Washer">Washer</option>
+        </select>
+      </div>
+      
+      <button type="submit" class="btn btn-primary">Login</button> &nbsp;
+     <!--  <button type="button" class="btn btn-danger" (click)="googleLogin()"><fa-icon [icon]="googleIcon"></fa-icon> Login with Google</button> -->
+  </form>
+</div>

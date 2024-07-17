@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="loginForm">
+    <!-- Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+  
+      <!-- EMAIL INPUT -->
+      <div class="form-group mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" formControlName="email">
+        <small class="text-danger" *ngIf="loginForm.get('email')!.touched && loginForm.get('email')!.invalid">
+          Invalid email address.
+        </small>
+      </div>
+  
+      <!-- PASSWORD INPUT -->
+      <div class="form-group mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" formControlName="password" required>
+        <small class="text-danger" *ngIf="loginForm.get('password')!.invalid && loginForm.get('password')!.touched">
+          Password is required.
+        </small>
+      </div>
+  
+      <!-- ROLE INPUT
+      <div class="form-group mb-3">
+        <label for="role" class="form-label">Who are you? (Select One)</label>
+        <select class="form-control" id="role" formControlName="role" required>
+          <option value="Customer">Customer</option>
+          <option value="Washer">Washer</option>
+        </select>
+      </div> -->
+  
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+  </div>
+  
+</div>

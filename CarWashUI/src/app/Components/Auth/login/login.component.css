@@ -1,0 +1,32 @@
+.loginForm {
+  width: 40%;
+  margin: auto;
+  padding: 40px;
+  background-color: rgba(128, 128, 128, 0.178);
+}
+
+.container{
+  height: 83vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#heading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 40px;
+  text-align: center;
+  padding: 20px;
+  display: block;
+  margin: auto;
+}
+
+#icon {
+  text-align: center;
+}
+
+#userIcon {
+  font-size: 5em;
+  color: black;
+  padding: 20px;
+}

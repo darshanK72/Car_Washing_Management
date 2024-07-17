@@ -1,0 +1,40 @@
+.signupForm{
+  width: 40%;
+  margin: auto;
+  margin-top:40px;
+  margin-bottom: 40px;;
+  padding: 40px;
+  background-color: rgba(128, 128, 128, 0.178);
+
+}
+
+
+#heading{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 40px;
+    text-align: center;
+    padding: 20px;
+    display: block;
+    margin: auto;
+}
+
+#icon{
+  text-align: center;
+}
+
+#userIcon{
+  font-size: 5em;
+  color: black;
+  padding: 20px;
+}
+
+
+.message{
+  background-color: rgb(9, 151, 9);
+  padding: 7px;
+  font-size: 18px;
+  margin-top: 30px;
+  border-radius: 5px;
+  text-align: center;
+  color: white;
+}

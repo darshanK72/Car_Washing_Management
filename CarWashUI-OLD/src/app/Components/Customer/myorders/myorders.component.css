@@ -1,0 +1,31 @@
+.heading{
+    font-size: 50px;
+    margin-left: 0;
+    padding: 15px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 2px;
+}
+
+.title{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.subtitle{
+    font-family: 'Padauk', sans-serif;
+    font-size: 25px;
+}
+
+/* Modal styling */
+.modal-body input{
+    text-transform: uppercase;
+}
+
+.modal-body label,.modal-body h5{
+    color : #007bff;
+}
+
+.modal-body{
+    font-size: large;
+}
+
