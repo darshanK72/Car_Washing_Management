@@ -7,6 +7,7 @@ namespace CarWashAPI.Interface
         Task<IEnumerable<Review>> GetAllReviewsAsync();
         Task<Review> GetReviewByIdAsync(int reviewId);
         Task<IEnumerable<Review>> GetReviewsByUserIdAsync(int UserId);
+        Task<Review> GetReviewsByOrderIdAsync(int OrderID);
         Task<IEnumerable<Review>> GetReviewsByWasherIdAsync(int washerId);
         Task<Review> AddReviewAsync(Review review);
         Task<Review> UpdateReviewAsync(Review review);

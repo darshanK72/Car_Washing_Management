@@ -50,62 +50,50 @@ const routes: Routes = [
   {
     path: 'adminDashboard',
     component: AdminDashboardComponent,
-    canActivate: [AdminGuardGuard],
     children: [
       {
         path: 'adminHome',
         component: AdminHomeComponent,
-        canActivate: [AdminGuardGuard],
       },
       {
         path: 'adminPlans',
-        component: PlansManagementComponent,
-        canActivate: [AdminGuardGuard],
+        component: PlansManagementComponent
       },
       {
         path: 'createPlan',
-        component: CreatPlanComponent,
-        canActivate: [AdminGuardGuard],
+        component: CreatPlanComponent
       },
       {
         path: 'editPlan/:id',
-        component: EditPlanComponent,
-        canActivate: [AdminGuardGuard],
+        component: EditPlanComponent
       },
       {
         path: 'adminAddons',
-        component: AddonManagementComponent,
-        canActivate: [AdminGuardGuard],
+        component: AddonManagementComponent
       },
       {
         path: 'createAddon',
-        component: CreateAddonComponent,
-        canActivate: [AdminGuardGuard],
+        component: CreateAddonComponent
       },
       {
         path: 'editAddon/:id',
-        component: EditAddonComponent,
-        canActivate: [AdminGuardGuard],
+        component: EditAddonComponent
       },
       {
         path: 'washerApproval',
-        component: WasherApprovalComponent,
-        canActivate: [AdminGuardGuard],
+        component: WasherApprovalComponent
       },
       {
         path: 'adminCars',
-        component: CarsManagementComponent,
-        canActivate: [AdminGuardGuard],
+        component: CarsManagementComponent
       },
       {
         path: 'createCar',
-        component: CreateCarComponent,
-        canActivate: [AdminGuardGuard],
+        component: CreateCarComponent
       },
       {
         path: 'editCar/:id',
-        component: EditCarComponent,
-        canActivate: [AdminGuardGuard],
+        component: EditCarComponent
       },
     ],
   },

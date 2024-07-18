@@ -8,6 +8,9 @@ namespace CarWashAPI.Interface
     {
         Task<RegistrationResult> RegisterUserAsync(RegisterDto registerDto);
         Task<dynamic> LoginAsync(string email, string password);
+        Task<User> GetUserByIdAsync(int UserId);
+        Task<Admin> GetAdminByIdAsync(int AdminId);
+        Task<Washer> GetWasherByIdAsync(int WasherId);
         Task<bool> EmailExistsAsync(string email);
         Task<Admin> GetAdminByEmailAsync(string email);
         Task<User> GetUserByEmailAsync(string email);

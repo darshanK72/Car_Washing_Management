@@ -51,6 +51,12 @@ namespace CarWashAPI.Model
         [ForeignKey("ReceiptId")]
         [JsonIgnore]
         public Receipt Receipt { get; set; }
+        public int? PaymentId { get; set; }
+
+        [ForeignKey("PaymentId")]
+        [JsonIgnore]
+        public Payment Payment { get; set; }
+
 
         [Required]
         public int PackageId { get; set; }

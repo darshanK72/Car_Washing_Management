@@ -1,1 +1,56 @@
-<p>profile works!</p>
+<div class="container mt-5">
+    <h2 class="mb-3 text-center">User Profile</h2>
+    <div class="row justify-content-center userProfile">
+      <div class="col-12">
+        <div class="text-center mb-4">
+          <img 
+            *ngIf="user?.profilePicture" 
+            [src]="user?.profilePicture" 
+            alt="Profile Picture" 
+            class="rounded-circle" 
+            width="150" 
+            height="150">
+          <img 
+            *ngIf="!user?.profilePicture" 
+            src="https://via.placeholder.com/150" 
+            alt="Profile Picture" 
+            class="rounded-circle" 
+            width="150" 
+            height="150">
+        </div>
+        <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-md-6 mt-3">
+              <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" class="form-control" formControlName="name">
+              </div>
+              <div class="form-group mt-3">
+                <label for="email">Email</label>
+                <input type="email" id="email" class="form-control" formControlName="email">
+              </div>
+              <div class="form-group mt-3">
+                <label for="phoneNumber">Phone Number</label>
+                <input type="text" id="phoneNumber" class="form-control" formControlName="phoneNumber">
+              </div>
+            </div>
+            <div class="col-md-6 mt-3">
+              <div class="form-group">
+                <label for="profilePicture">Profile Picture URL</label>
+                <input type="text" id="profilePicture" class="form-control" formControlName="profilePicture">
+              </div>
+              <div class="form-group mt-3">
+                <label for="address">Address</label>
+                <textarea id="address" class="form-control" formControlName="address" rows="4"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="text-center mt-5">
+            <button type="button" class="btn btn-primary" *ngIf="!isEditMode" (click)="enableEditMode()">Edit</button>
+            <button type="submit" class="btn btn-success" *ngIf="isEditMode" [disabled]="userForm.invalid">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

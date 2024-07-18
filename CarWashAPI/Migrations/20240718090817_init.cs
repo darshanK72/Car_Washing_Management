@@ -53,7 +53,7 @@ namespace CarWashAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     WashingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TransactionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -126,6 +126,33 @@ namespace CarWashAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    PaymentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentType = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ReceiptId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.PaymentId);
+                    table.ForeignKey(
+                        name: "FK_Payments_Receipts_ReceiptId",
+                        column: x => x.ReceiptId,
+                        principalTable: "Receipts",
+                        principalColumn: "ReceiptId");
+                    table.ForeignKey(
+                        name: "FK_Payments_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -139,7 +166,8 @@ namespace CarWashAPI.Migrations
                     UserId = table.Column<int>(type: "int", nullable: false),
                     WasherId = table.Column<int>(type: "int", nullable: false),
                     CarId = table.Column<int>(type: "int", nullable: false),
-                    ReceiptId = table.Column<int>(type: "int", nullable: false),
+                    ReceiptId = table.Column<int>(type: "int", nullable: true),
+                    PaymentId = table.Column<int>(type: "int", nullable: true),
                     PackageId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -158,11 +186,15 @@ namespace CarWashAPI.Migrations
                         principalColumn: "PackageId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Orders_Payments_PaymentId",
+                        column: x => x.PaymentId,
+                        principalTable: "Payments",
+                        principalColumn: "PaymentId");
+                    table.ForeignKey(
                         name: "FK_Orders_Receipts_ReceiptId",
                         column: x => x.ReceiptId,
                         principalTable: "Receipts",
-                        principalColumn: "ReceiptId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ReceiptId");
                     table.ForeignKey(
                         name: "FK_Orders_Users_UserId",
                         column: x => x.UserId,
@@ -228,6 +260,11 @@ namespace CarWashAPI.Migrations
                 column: "PackageId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_PaymentId",
+                table: "Orders",
+                column: "PaymentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_ReceiptId",
                 table: "Orders",
                 column: "ReceiptId");
@@ -241,6 +278,16 @@ namespace CarWashAPI.Migrations
                 name: "IX_Orders_WasherId",
                 table: "Orders",
                 column: "WasherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_ReceiptId",
+                table: "Payments",
+                column: "ReceiptId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_UserId",
+                table: "Payments",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_OrderId",
@@ -277,10 +324,13 @@ namespace CarWashAPI.Migrations
                 name: "Packages");
 
             migrationBuilder.DropTable(
-                name: "Receipts");
+                name: "Payments");
 
             migrationBuilder.DropTable(
                 name: "Washers");
+
+            migrationBuilder.DropTable(
+                name: "Receipts");
 
             migrationBuilder.DropTable(
                 name: "Users");

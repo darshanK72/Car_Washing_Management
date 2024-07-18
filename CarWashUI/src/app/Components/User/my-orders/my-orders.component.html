@@ -1,0 +1,119 @@
+<div class="container p-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        <div class="card-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Status</th>
+                <th>Scheduled Date</th>
+                <th>Actual Wash Date</th>
+                <th>Total Price</th>
+                <th>Notes</th>
+                <th>User ID</th>
+                <th>Washer ID</th>
+                <th>Car ID</th>
+                <th>Receipt ID</th>
+                <th>Package ID</th>
+                <th>Actions</th>
+                <th>Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let order of orders; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.scheduledDate | date }}</td>
+                <td>{{ order.actualWashDate | date }}</td>
+                <td>{{ order.totalPrice | currency }}</td>
+                <td>{{ order.notes }}</td>
+                <td>{{ order.userId }}</td>
+                <td>{{ order.washerId }}</td>
+                <td>{{ order.carId }}</td>
+                <td>{{ order.receiptId }}</td>
+                <td>{{ order.packageId }}</td>
+                <td>
+                  <button class="btn btn-info me-2" *ngIf="order.status != 'Completed'"
+                    (click)="onPay(order)">Pay</button>
+                  <button class="btn btn-success me-2" *ngIf="order.status == 'Completed'">Paid</button>
+                </td>
+                <td>
+                  <button class="btn btn-info me-2" *ngIf="!order.reviewId" (click)="onRate(order)">Rate
+                    Now</button>
+                    <button class="btn btn-info me-2" *ngIf="order.reviewId" >Rated
+                    </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Form -->
+  <div *ngIf="selectedOrder && showPaymentForm" class="card mb-4">
+    <div class="card-header">
+      <h4>Make Payment for Order: {{ selectedOrder.orderId }}</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="paymentForm" (ngSubmit)="onSubmitPayment()">
+        <div class="form-group row my-2">
+          <label for="totalPrice" class="col-2 col-form-label">Total Price</label>
+          <div class="col-10">
+            <input type="number" id="totalPrice" formControlName="totalPrice" class="form-control"
+              [value]="selectedOrder.totalPrice" readonly />
+          </div>
+        </div>
+        <div class="form-group row my-2">
+          <label for="paymentTime" class="col-2 col-form-label">Payment Time</label>
+          <div class="col-10">
+            <input type="datetime-local" id="paymentTime" formControlName="paymentTime" class="form-control" />
+          </div>
+        </div>
+        <div class="form-group mb-4">
+          <label for="paymentType">Payment Method</label>
+          <select id="paymentType" class="form-control" formControlName="paymentType">
+            <option value="">Select payment method</option>
+            <option *ngFor="let method of paymentMethods" [value]="method">
+              {{ method }}
+            </option>
+          </select>
+          <div *ngIf="paymentForm.get('paymentType')!.invalid && paymentForm.get('paymentType')!.touched"
+            class="text-danger">
+            Payment method is required.
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success me-2" [disabled]="paymentForm.invalid">Submit Payment</button>
+        <button type="button" class="btn btn-secondary me-2" (click)="onCancel()">Cancel</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Review Form -->
+  <div *ngIf="selectedOrder && showReviewForm" class="card mb-4">
+    <div class="card-header">
+      <h4>Rate Order: {{ selectedOrder.orderId }}</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="reviewForm" (ngSubmit)="onSubmitReview()">
+        <div class="form-group row my-2">
+          <label for="rating" class="col-2 col-form-label">Rating</label>
+          <div class="col-10">
+            <input type="number" id="rating" formControlName="rating" class="form-control" min="1" max="5" />
+          </div>
+        </div>
+        <div class="form-group row my-2">
+          <label for="comment" class="col-2 col-form-label">Comments</label>
+          <div class="col-10">
+            <textarea id="comment" formControlName="comment" class="form-control" rows="3"></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success me-2" [disabled]="reviewForm.invalid">Submit Review</button>
+        <button type="button" class="btn btn-secondary me-2" (click)="onCancelReview()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

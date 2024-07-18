@@ -8,7 +8,7 @@ using CarWashAPI.DTO;
 
 namespace CarWashAPI.Controllers
 {
-    [Route("api/cars")]
+    [Route("api/[Controller]")]
     [ApiController]
     public class CarsController : ControllerBase
     {
@@ -52,6 +52,24 @@ namespace CarWashAPI.Controllers
             try
             {
                 var car = await _carRepository.GetCarByIdAsync(id);
+                if (car == null)
+                {
+                    return NotFound();
+                }
+                return Ok(car);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("user/{UserId}")]
+        public async Task<ActionResult<Car>> GetCarByUserId(int UserId)
+        {
+            try
+            {
+                var car = await _carRepository.GetCarByUserIdAsync(UserId);
                 if (car == null)
                 {
                     return NotFound();

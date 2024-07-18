@@ -1,0 +1,33 @@
+<div class="container p-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-4">
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Washing Date</th>
+                  <th>Amount</th>
+                  <th>Payment Method</th>
+                  <th>Transaction ID</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let receipt of receipts; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ receipt.washingDate | date }}</td>
+                  <td>{{ receipt.amount | currency }}</td>
+                  <td>{{ receipt.paymentMethod }}</td>
+                  <td>{{ receipt.transactionId }}</td>
+                  <td>{{ receipt.status }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

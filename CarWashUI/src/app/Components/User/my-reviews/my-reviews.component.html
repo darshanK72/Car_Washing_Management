@@ -1,0 +1,31 @@
+<div class="container p-4">
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-4">
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Rating</th>
+                  <th>Comment</th>
+                  <th>Order ID</th>
+                  <th>Washer ID</th> 
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let review of reviews; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ review.rating }}</td>
+                  <td>{{ review.comment }}</td>
+                  <td>{{ review.orderId }}</td>
+                  <td>{{ review.washerId }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

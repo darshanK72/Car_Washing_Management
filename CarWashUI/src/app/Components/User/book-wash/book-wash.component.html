@@ -1,0 +1,90 @@
+<div class="container p-5">
+    <div class="row">
+        
+        <div class="col-8">
+            <div class="home">
+                <div class="car">
+                    <h1 class="heading">Place an Order</h1>
+                    <form [formGroup]="orderForm" (ngSubmit)="onSubmit()">
+                        <div class="form-group mb-4">
+                            <label for="package">Select a Package</label>
+                            <select id="package" class="form-control" formControlName="packageId">
+                                <option value="">Choose a package</option>
+                                <option *ngFor="let package of packages" [value]="package.packageId">
+                                    {{package.name | uppercase}} - {{package.price | currency}}
+                                </option>
+                            </select>
+                            <div *ngIf="orderForm.get('packageId')!.invalid && orderForm.get('packageId')!.touched"
+                                class="text-danger">
+                                Package is required.
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="car">Select Your Car</label>
+                            <select id="car" class="form-control" formControlName="carId">
+                                <option value="">Choose a car</option>
+                                <option *ngFor="let car of cars" [value]="car.carId">
+                                    {{car.make}} {{car.model}} ({{car.year}})
+                                </option>
+                            </select>
+                            <div *ngIf="orderForm.get('carId')!.invalid && orderForm.get('carId')!.touched"
+                                class="text-danger">
+                                Car selection is required.
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label>Schedule</label>
+                            <div class="form-check">
+                                <input type="radio" id="scheduleNow" formControlName="scheduleNow" [value]="true"
+                                    class="form-check-input">
+                                <label for="scheduleNow" class="form-check-label">Wash Now</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="radio" id="scheduleLater" formControlName="scheduleNow" [value]="false"
+                                    class="form-check-input">
+                                <label for="scheduleLater" class="form-check-label">Schedule for Later</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4" *ngIf="!orderForm.get('scheduleNow')!.value">
+                            <label for="scheduledDate">Select Date and Time</label>
+                            <input type="datetime-local" id="scheduledDate" class="form-control"
+                                formControlName="scheduledDate">
+                            <div *ngIf="orderForm.get('scheduledDate')!.invalid && orderForm.get('scheduledDate')!.touched"
+                                class="text-danger">
+                                Date and time are required for scheduled washes.
+                            </div>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="notes">Special Instructions</label>
+                            <textarea id="notes" class="form-control" rows="3" formControlName="notes"></textarea>
+                            <div *ngIf="orderForm.get('notes')!.invalid && orderForm.get('notes')!.touched"
+                                class="text-danger">
+                                Notes cannot exceed 500 characters.
+                            </div>
+                        </div>
+
+                        
+
+                        <button type="submit" class="btn btn-primary">Place
+                            Order</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div #toast class="toast align-items-center text-white border-0" [ngClass]="{'bg-success': isSuccess, 'bg-danger': !isSuccess}" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                {{ toastMessage }}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>

@@ -33,11 +33,11 @@ namespace CarWashAPI.DTO
         public DateTime? ActualWashDate { get; set; }
 
         [Required(ErrorMessage = "Total price is required.")]
-        //[Range(0, 10000, ErrorMessage = "Total price must be between 0.01 and 10000.00.")]
-        [JsonIgnore]
         public decimal TotalPrice { get; set; }
 
         [StringLength(500, ErrorMessage = "Notes length can't be more than 500 characters.")]
         public string Notes { get; set; }
+
+        public int? ReviewId { get; set; }
     }
 }

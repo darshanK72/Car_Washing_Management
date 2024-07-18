@@ -17,6 +17,7 @@ namespace CarWashAPI.Model
         public DbSet<Package> Packages { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Receipt> Receipts { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
     }
 }

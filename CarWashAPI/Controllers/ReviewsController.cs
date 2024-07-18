@@ -112,6 +112,21 @@ namespace CarWash2.Controllers
             }
         }
 
+        [HttpGet("order/{OrderId}")]
+        public async Task<ActionResult<IEnumerable<ReviewDto>>> GetReviewsByOrderId(int OrderId)
+        {
+            try
+            {
+                var reviews = await _reviewRepository.GetReviewsByOrderIdAsync(OrderId);
+
+                return Ok(MapModelToDto(reviews));
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
         [HttpGet("washer/{washerId}")]
         [Authorize(Policy = "RequireOwnerRole")]
         public async Task<ActionResult<IEnumerable<ReviewDto>>> GetReviewsByWasherId(int washerId)

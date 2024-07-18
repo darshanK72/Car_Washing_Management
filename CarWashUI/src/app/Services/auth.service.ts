@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { User } from '../Models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +36,28 @@ export class AuthService {
     return null;
   }
 
+  public getUserId(){
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      let user = JSON.parse(userData);
+        return user.UserId;
+     
+    }
+    return null;
+  }
+
+  getUserRoleAndId(){
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      let user = JSON.parse(userData);
+      let {AdminId,UserId,WasherId,Role} = user;
+      if(AdminId) return {AdminId,Role};
+      else if(UserId) return {UserId,Role};
+      else return {WasherId,Role};
+    }
+    return null;
+  }
+
   login(loginDto: LoginDto): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/login`, loginDto).pipe(
       tap(response => {
@@ -62,6 +85,32 @@ export class AuthService {
     this.loggedIn.next(false);
     this.loggedInUser.next(null);
     this.router.navigate(['/login']);
+  }
+
+  updateUser(user: User): Observable<User> {
+    const url = `${this.baseUrl}/user`;
+    return this.http.put<User>(url, user, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+  getUserById(id:number) : Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}/user/${id}`);
+  }
+
+  getUserByRoleAndId(userRoleId:any){
+    let {AdminId,UserId,WasherId,Role} = userRoleId;
+      if(AdminId) {
+        return this.http.get<User>(`${this.baseUrl}/admin/${AdminId}`);
+      }
+      else if(UserId){
+        return this.http.get<User>(`${this.baseUrl}/user/${UserId}`);
+      }
+      else{
+        return this.http.get<User>(`${this.baseUrl}/washer/${WasherId}`);
+      }
   }
 
 }

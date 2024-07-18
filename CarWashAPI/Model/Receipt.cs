@@ -16,8 +16,7 @@ namespace CarWashAPI.Model
         [Required]
         public decimal Amount { get; set; }
 
-        [Required]
-        public string PaymentMethod { get; set; }
+        public string? PaymentMethod { get; set; }
 
         [Required]
         public string TransactionId { get; set; }

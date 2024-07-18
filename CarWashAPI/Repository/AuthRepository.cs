@@ -91,6 +91,20 @@ namespace CarWashAPI.Repository
             return null;
         }
 
+        public async Task<User> GetUserByIdAsync(int UserId)
+        {
+            return await _context.Users.FindAsync(UserId);
+        }
+
+        public async Task<Admin> GetAdminByIdAsync(int AdminId)
+        {
+            return await _context.Admins.FindAsync(AdminId);
+        }
+
+        public async Task<Washer> GetWasherByIdAsync(int WasherId)
+        {
+            return await _context.Washers.FindAsync(WasherId);
+        }
         public async Task<bool> EmailExistsAsync(string email)
         {
             return await _context.Admins.AnyAsync(a => a.Email == email) ||

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarWashAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240717133533_init")]
+    [Migration("20240718090817_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -128,8 +128,10 @@ namespace CarWashAPI.Migrations
                     b.Property<int>("PackageId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("PaymentId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ReceiptId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("ScheduledDate")
@@ -154,6 +156,8 @@ namespace CarWashAPI.Migrations
                     b.HasIndex("CarId");
 
                     b.HasIndex("PackageId");
+
+                    b.HasIndex("PaymentId");
 
                     b.HasIndex("ReceiptId");
 
@@ -187,6 +191,40 @@ namespace CarWashAPI.Migrations
                     b.HasKey("PackageId");
 
                     b.ToTable("Packages");
+                });
+
+            modelBuilder.Entity("CarWashAPI.Model.Payment", b =>
+                {
+                    b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
+
+                    b.Property<DateTime>("PaymentTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int?>("ReceiptId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("ReceiptId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("CarWashAPI.Model.Receipt", b =>
@@ -365,11 +403,13 @@ namespace CarWashAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("CarWashAPI.Model.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymentId");
+
                     b.HasOne("CarWashAPI.Model.Receipt", "Receipt")
                         .WithMany()
-                        .HasForeignKey("ReceiptId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ReceiptId");
 
                     b.HasOne("CarWashAPI.Model.User", "User")
                         .WithMany("Orders")
@@ -387,11 +427,28 @@ namespace CarWashAPI.Migrations
 
                     b.Navigation("Package");
 
+                    b.Navigation("Payment");
+
                     b.Navigation("Receipt");
 
                     b.Navigation("User");
 
                     b.Navigation("Washer");
+                });
+
+            modelBuilder.Entity("CarWashAPI.Model.Payment", b =>
+                {
+                    b.HasOne("CarWashAPI.Model.Receipt", "Receipt")
+                        .WithMany()
+                        .HasForeignKey("ReceiptId");
+
+                    b.HasOne("CarWashAPI.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Receipt");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CarWashAPI.Model.Review", b =>

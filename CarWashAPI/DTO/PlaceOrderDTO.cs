@@ -21,8 +21,5 @@ namespace CarWashAPI.DTO
 
         [StringLength(500)]
         public string Notes { get; set; }
-
-        [Required]
-        public string PaymentMethod { get; set; }
     }
 }

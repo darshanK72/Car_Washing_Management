@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CarWashAPI.Repository;
 
 namespace CarWash2.Controllers
 {
@@ -13,10 +14,12 @@ namespace CarWash2.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IReviewRepository _reviewRepository;
 
-        public OrdersController(IOrderRepository orderRepository)
+        public OrdersController(IOrderRepository orderRepository,IReviewRepository reviewRepository)
         {
             _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+            _reviewRepository = reviewRepository;
         }
 
         private Order MapDtoToModel(OrderDTO orderDto)
@@ -36,6 +39,20 @@ namespace CarWash2.Controllers
             };
         }
 
+        [HttpPost("complete-payment")]
+        public async Task<ActionResult<Order>> CompletePayment(PaymentDTO paymentDTO)
+        {
+            try
+            {
+                var result = await _orderRepository.CompletePaymentAsync(paymentDTO);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDTO>>> GetOrders()
         {
@@ -47,7 +64,7 @@ namespace CarWash2.Controllers
                 var orderDTOs = new List<OrderDTO>();
                 foreach (var order in orders)
                 {
-                    orderDTOs.Add(new OrderDTO
+                    var orderDto = new OrderDTO
                     {
                         OrderId = order.OrderId,
                         UserId = order.UserId,
@@ -60,7 +77,14 @@ namespace CarWash2.Controllers
                         TotalPrice = order.TotalPrice,
                         RecepitId = order.ReceiptId,
                         Notes = order.Notes
-                    });
+                    };
+
+                    var review = await _reviewRepository.GetReviewsByOrderIdAsync(order.OrderId);
+                    if(review != null)
+                    {
+                        orderDto.ReviewId = review.ReviewId;
+                    }
+                    orderDTOs.Add(orderDto);
                 }
 
                 return Ok(orderDTOs);
@@ -70,6 +94,50 @@ namespace CarWash2.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpGet("user/receipt/{UserId}")]
+        public async Task<ActionResult<Car>> GetReceiptsByUserId(int UserId)
+        {
+            try
+            {
+                var car = await _orderRepository.GetReciptsByIdAsync(UserId);
+                if (car == null)
+                {
+                    return NotFound();
+                }
+                return Ok(car);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("user/{UserId}")]
+        public async Task<ActionResult<Car>> GetOrdersByUserId(int UserId)
+        {
+            try
+            {
+                var car = await _orderRepository.GetOrdersByUserId(UserId);
+                if (car == null)
+                {
+                    return NotFound();
+                }
+                return Ok(car);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("leaderboard")]
+        public async Task<ActionResult<List<User>>> GetUsersSortedByOrders()
+        {
+            var users = await _orderRepository.GetUsersSortedByOrdersAsync();
+            return Ok(users);
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderDTO>> GetOrder(int id)
@@ -121,7 +189,7 @@ namespace CarWash2.Controllers
                     return BadRequest("Invalid package ID");
                 }
 
-                var receipt = await _orderRepository.CreateReceiptAsync(package.Price, placeOrderDto.PaymentMethod);
+                var receipt = await _orderRepository.CreateReceiptAsync(package.Price);
 
                 var createdOrder = await _orderRepository.PlaceOrderAsync(placeOrderDto, receipt.ReceiptId);
 

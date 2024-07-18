@@ -26,6 +26,11 @@ namespace CarWashAPI.Repository
             return await _context.Cars.FindAsync(carId);
         }
 
+        public async Task<IEnumerable<Car>> GetCarByUserIdAsync(int UserId)
+        {
+            return await _context.Cars.Where(c => c.UserId == UserId).ToListAsync();
+        }
+
         public async Task<Car> AddCarAsync(Car car)
         {
             _context.Cars.Add(car);

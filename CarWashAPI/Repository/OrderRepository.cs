@@ -1,6 +1,7 @@
 ﻿using CarWashAPI.DTO;
 using CarWashAPI.Interface;
 using CarWashAPI.Model;
+using MailKit.Search;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarWashAPI.Repository
@@ -8,10 +9,11 @@ namespace CarWashAPI.Repository
     public class OrderRepository : IOrderRepository
     {
         private readonly ApplicationDbContext _context;
-
-        public OrderRepository(ApplicationDbContext context)
+        private readonly IReviewRepository _reviewRepository;
+        public OrderRepository(ApplicationDbContext context,IReviewRepository  reviewRepository)
         {
             _context = context;
+            _reviewRepository = reviewRepository;
         }
 
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()
@@ -21,6 +23,7 @@ namespace CarWashAPI.Repository
                 .Include(o => o.Washer)
                 .Include(o => o.Car)
                 .Include(o => o.Package)
+                .Include(o => o.Receipt)
                 .ToListAsync();
         }
 
@@ -33,6 +36,107 @@ namespace CarWashAPI.Repository
                 .Include(o => o.Package)
                 .FirstOrDefaultAsync(o => o.OrderId == orderId);
         }
+
+        public async Task<List<OrderDTO>> GetOrdersByUserId(int userId)
+        {
+            var orders = _context.Orders.Where(o => o.UserId == userId).ToList();
+
+            var orderDTOs = new List<OrderDTO>();
+            foreach (var order in orders)
+            {
+                var orderDto = new OrderDTO
+                {
+                    OrderId = order.OrderId,
+                    UserId = order.UserId,
+                    WasherId = order.WasherId,
+                    CarId = order.CarId,
+                    PackageId = order.PackageId,
+                    Status = order.Status,
+                    ScheduledDate = order.ScheduledDate,
+                    ActualWashDate = order.ActualWashDate,
+                    TotalPrice = order.TotalPrice,
+                    RecepitId = order.ReceiptId,
+                    Notes = order.Notes
+                };
+
+                var review = await _reviewRepository.GetReviewsByOrderIdAsync(order.OrderId);
+                if (review != null)
+                {
+                    orderDto.ReviewId = review.ReviewId;
+                }
+                orderDTOs.Add(orderDto);
+            }
+
+                
+            return orderDTOs;
+        }
+
+
+        public async Task<List<Receipt>> GetReciptsByIdAsync(int userId)
+        {
+
+            var orders = _context.Orders.Where(o => o.UserId == userId).ToList();
+            List<Receipt> recipts = new List<Receipt>();
+            foreach(var order in orders)
+            {
+                var r = await _context.Receipts.FindAsync(order.ReceiptId);
+                if (r != null)
+                {
+                    recipts.Add(r);
+                }
+            }
+            return recipts;
+        }
+
+
+        public async Task<Order> CompletePaymentAsync(PaymentDTO paymentDTO)
+        {
+            var order = await _context.Orders
+                .FirstOrDefaultAsync(r => r.OrderId == paymentDTO.OrderId);
+
+            if (order == null)
+                throw new ArgumentException("Order not found");
+
+            var recepit = await _context.Receipts.FindAsync(order.ReceiptId);
+
+            if (recepit.Status != "Not Paid")
+                throw new InvalidOperationException("Receipt is not in the correct state for payment");
+
+            var user = await _context.Users.FindAsync(order.UserId);
+
+            if (user == null)
+                throw new ArgumentException("User not found");
+
+            var payment = new Payment
+            {
+                TotalAmount = order.TotalPrice,
+                PaymentTime = DateTime.UtcNow,
+                PaymentType = paymentDTO.PaymentType,
+                User = user,
+                UserId = user.UserId
+            };
+
+
+            payment.Receipt = recepit ;
+            payment.ReceiptId = order.ReceiptId;
+            order.Payment = payment;
+            order.Receipt = recepit;
+            order.Status = "Completed";
+            recepit.Status = "Paid";
+
+            await _context.SaveChangesAsync();
+
+            return order;
+        }
+
+        public async Task<List<User>> GetUsersSortedByOrdersAsync()
+        {
+            return await _context.Users
+                .Include(u => u.Orders)
+                .OrderByDescending(u => u.Orders.Count)
+                .ToListAsync();
+        }
+
 
         public async Task<Order> AddOrderAsync(Order order)
         {
@@ -65,15 +169,14 @@ namespace CarWashAPI.Repository
             return await _context.Packages.FindAsync(id);
         }
 
-        public async Task<Receipt> CreateReceiptAsync(decimal amount, string paymentMethod)
+        public async Task<Receipt> CreateReceiptAsync(decimal amount)
         {
             var receipt = new Receipt
             {
                 WashingDate = DateTime.Now,
                 Amount = amount,
-                PaymentMethod = paymentMethod,
                 TransactionId = Guid.NewGuid().ToString(),
-                Status = "Pending"
+                Status = "Created"
             };
 
             _context.Receipts.Add(receipt);
@@ -115,7 +218,7 @@ namespace CarWashAPI.Repository
 
             _context.Orders.Add(order);
 
-            receipt.Status = "Paid";
+            receipt.Status = "Not Paid";
 
             await _context.SaveChangesAsync();
 

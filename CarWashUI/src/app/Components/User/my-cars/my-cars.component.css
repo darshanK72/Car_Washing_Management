@@ -1,0 +1,13 @@
+.table {
+    width: 100%;
+    margin: auto;
+  }
+  
+  .table thead {
+    background-color: #f8f9fa;
+  }
+  
+  .table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
