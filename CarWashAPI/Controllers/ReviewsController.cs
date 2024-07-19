@@ -151,8 +151,6 @@ namespace CarWash2.Controllers
         }
 
         [HttpPost]
-       // [Authorize(Policy = "RequireUserRole")]
-
         public async Task<ActionResult<ReviewDto>> AddReview(ReviewDto reviewDto)
         {
             try
@@ -164,8 +162,6 @@ namespace CarWash2.Controllers
 
                 var review = MapDtoToModel(reviewDto);
                 var createdReview = await _reviewRepository.AddReviewAsync(review);
-
-                // Map Review to ReviewDto
                 var createdReviewDto = MapModelToDto(createdReview);
 
                 return CreatedAtAction(nameof(GetReviewById), new { id = createdReview.ReviewId }, createdReviewDto);

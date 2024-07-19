@@ -1,0 +1,27 @@
+<div class="container my-4">
+    <h2>Add Washer</h2>
+    <form (ngSubmit)="saveWasher()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" [(ngModel)]="washer.name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" [(ngModel)]="washer.email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" [(ngModel)]="washer.password" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input type="text" class="form-control" id="phoneNumber" [(ngModel)]="washer.phoneNumber" name="phoneNumber" required>
+      </div>
+      <div class="form-group">
+        <label for="isActive">Active</label>
+        <input type="checkbox" class="form-check-input" id="isActive" [(ngModel)]="washer.isActive" name="isActive">
+      </div>
+      <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+  </div>
+  

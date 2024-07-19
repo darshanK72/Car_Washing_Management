@@ -1,0 +1,27 @@
+<div class="container my-4" *ngIf="washer">
+    <h2>Edit Washer</h2>
+    <form (ngSubmit)="updateWasher()">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" [(ngModel)]="washer.name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" [(ngModel)]="washer.email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">Phone Number</label>
+            <input type="text" class="form-control" id="phoneNumber" [(ngModel)]="washer.phoneNumber" name="phoneNumber"
+                required>
+        </div>
+        <div class="form-group">
+            <label for="isActive">Active</label>
+            <input type="checkbox" class="form-check-input" id="isActive" [(ngModel)]="washer.isActive" name="isActive">
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+
+    </form>
+</div>
+<div *ngIf="!washer" class="container mt-4">
+    <p>Loading washer details...</p>
+</div>

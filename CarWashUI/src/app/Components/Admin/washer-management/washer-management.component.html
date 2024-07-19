@@ -1,0 +1,38 @@
+<div class="container mt-4">
+    <h2>Washer Management</h2>
+    <router-outlet></router-outlet>
+    <button class="btn btn-primary mb-3" (click)="addWasher()">Add Washer</button>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let washer of washers; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ washer.name }}</td>
+          <td>{{ washer.email }}</td>
+          <td>{{ washer.phoneNumber }}</td>
+          <td>
+            <span class="badge" [ngClass]="{'badge-success': washer.isActive, 'badge-danger': !washer.isActive}">
+              {{ washer.isActive ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="viewDetails(washer.washerId)">View</button>
+            <button class="btn btn-secondary btn-sm" (click)="toggleStatus(washer.washerId)">
+              {{ washer.isActive ? 'Deactivate' : 'Activate' }}
+            </button>
+            <button class="btn btn-info btn-sm" (click)="editWasher(washer.washerId)">Edit</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

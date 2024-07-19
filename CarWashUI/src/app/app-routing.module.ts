@@ -16,8 +16,17 @@ import { BookWashComponent } from './Components/User/book-wash/book-wash.compone
 import { MyOrdersComponent } from './Components/User/my-orders/my-orders.component';
 import { MyReviewsComponent } from './Components/User/my-reviews/my-reviews.component';
 import { ReceiptsComponent } from './Components/User/receipts/receipts.component';
-import { LeaderboardComponent } from './Components/User/leaderboard/leaderboard.component';
 import { MyCarsComponent } from './Components/User/my-cars/my-cars.component';
+import { UserManagementComponent } from './Components/Admin/user-management/user-management.component';
+import { WasherManagementComponent } from './Components/Admin/washer-management/washer-management.component';
+import { OrderManagementComponent } from './Components/Admin/order-management/order-management.component';
+import { ReportsComponent } from './Components/Admin/reports/reports.component';
+import { UserDetailsComponent } from './Components/Admin/user-management/user-details/user-details.component';
+import { WasherDetailsComponent } from './Components/Admin/washer-management/washer-details/washer-details.component';
+import { AddWasherComponent } from './Components/Admin/washer-management/add-washer/add-washer.component';
+import { EditWasherComponent } from './Components/Admin/washer-management/edit-washer/edit-washer.component';
+import { OrderDetailsComponent } from './Components/Admin/order-management/order-details/order-details.component';
+import { LeaderboardComponent } from './Components/Auth/leaderboard/leaderboard.component';
 
 const routes: Routes = [
   {
@@ -42,6 +51,11 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+  },
+  {
+    path: 'leaderboard',
+    component: LeaderboardComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'user',
@@ -78,11 +92,6 @@ const routes: Routes = [
         component: MyCarsComponent,
         canActivate: [AuthGuard, UserGuard],
       },
-      {
-        path: 'leaderboard',
-        component: LeaderboardComponent,
-        canActivate: [AuthGuard, UserGuard],
-      },
     ],
   },
   {
@@ -94,6 +103,64 @@ const routes: Routes = [
     path: 'admin',
     component: AdminComponent,
     canActivate: [AuthGuard, AdminGuard],
+    children: [
+      {
+        path: 'user-management',
+        component: UserManagementComponent,
+        canActivate: [AuthGuard, AdminGuard],
+        children: [
+          {
+            path: 'user-details/:id',
+            component: UserDetailsComponent,
+            canActivate: [AuthGuard, AdminGuard],
+          },
+        ],
+      },
+      {
+        path: 'washer-management',
+        component: WasherManagementComponent,
+        canActivate: [AuthGuard, AdminGuard],
+        children: [
+          {
+            path: 'washer-details/:id',
+            component: WasherDetailsComponent,
+            canActivate: [AuthGuard, AdminGuard],
+          },
+          {
+            path: 'add-washer',
+            component: AddWasherComponent,
+            canActivate: [AuthGuard, AdminGuard],
+          },
+          {
+            path: 'edit-washer/:id',
+            component: EditWasherComponent,
+            canActivate: [AuthGuard, AdminGuard],
+          },
+        ],
+      },
+      {
+        path: 'order-management',
+        component: OrderManagementComponent,
+        canActivate: [AuthGuard, AdminGuard],
+        children: [
+          {
+            path: 'order-details/:id',
+            component: OrderDetailsComponent,
+            canActivate: [AuthGuard, AdminGuard],
+          },
+        ],
+      },
+      {
+        path: 'reports',
+        component: ReportsComponent,
+        canActivate: [AuthGuard, AdminGuard],
+      },
+      {
+        path: 'leaderboard',
+        component: LeaderboardComponent,
+        canActivate: [AuthGuard, AdminGuard],
+      },
+    ],
   },
 ];
 

@@ -20,7 +20,7 @@ namespace CarWashAPI.DTO
         public string PhoneNumber { get; set; }
 
         [Required]
-        [RegularExpression("^(Admin|User|Washer)$", ErrorMessage = "Role must be either Admin, Customer, or Washer")]
+        [RegularExpression("^(Admin|User|Washer)$", ErrorMessage = "Role must be either Admin, User, or Washer")]
         public string Role { get; set; }
     }
 }

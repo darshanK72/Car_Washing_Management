@@ -1,0 +1,49 @@
+<div class="container mt-4" *ngIf="order; else loading">
+    <h2 class="mb-4">Order Details</h2>
+    
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Order ID: {{ order.orderId }}</h5>
+        <p class="card-text"><strong>Status:</strong> {{ order.status }}</p>
+        <p class="card-text"><strong>Scheduled Date:</strong> {{ order.scheduledDate | date }}</p>
+        <p class="card-text"><strong>Actual Wash Date:</strong> {{ order.actualWashDate | date }}</p>
+        <p class="card-text"><strong>Total Price:</strong> {{ order.totalPrice | currency }}</p>
+        <p class="card-text"><strong>Notes:</strong> {{ order.notes }}</p>
+      </div>
+    </div>
+  
+    <div class="card mb-4" *ngIf="payment">
+      <div class="card-body">
+        <h4 class="card-title">Payment Details</h4>
+        <p class="card-text"><strong>Total Amount:</strong> {{ payment.totalAmount | currency }}</p>
+        <p class="card-text"><strong>Payment Time:</strong> {{ payment.paymentTime | date }}</p>
+        <p class="card-text"><strong>Payment Type:</strong> {{ payment.paymentType }}</p>
+      </div>
+    </div>
+  
+    <div class="card mb-4" *ngIf="receipt">
+      <div class="card-body">
+        <h4 class="card-title">Receipt Details</h4>
+        <p class="card-text"><strong>Washing Date:</strong> {{ receipt.washingDate | date }}</p>
+        <p class="card-text"><strong>Amount:</strong> {{ receipt.amount | currency }}</p>
+        <p class="card-text"><strong>Payment Method:</strong> {{ receipt.paymentMethod }}</p>
+        <p class="card-text"><strong>Transaction ID:</strong> {{ receipt.transactionId }}</p>
+        <p class="card-text"><strong>Status:</strong> {{ receipt.status }}</p>
+      </div>
+    </div>
+  
+    <div class="card mb-4" *ngIf="review">
+      <div class="card-body">
+        <h4 class="card-title">Review Details</h4>
+        <p class="card-text"><strong>Rating:</strong> {{ review.rating }}</p>
+        <p class="card-text"><strong>Comment:</strong> {{ review.comment }}</p>
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #loading>
+    <div class="container mt-4">
+      <p>Loading order details...</p>
+    </div>
+  </ng-template>
+  

@@ -1,0 +1,84 @@
+<!-- reports.component.html -->
+<div class="container mt-4">
+    <h2>Reports</h2>
+    
+    <form (ngSubmit)="fetchReport()" #reportForm="ngForm">
+        <div class="form-group">
+          <label for="startDate">Start Date</label>
+          <input type="date" id="startDate" name="startDate" class="form-control" [(ngModel)]="startDate" required>
+        </div>
+    
+        <div class="form-group mt-2">
+          <label for="endDate">End Date</label>
+          <input type="date" id="endDate" name="endDate" class="form-control" [(ngModel)]="endDate" required>
+        </div>
+    
+        <button type="submit" class="btn btn-primary mt-3">Generate Report</button>
+      </form>
+
+    <div *ngIf="report">
+      <div class="card my-4">
+        <div class="card-body">
+          <h4>Order Report</h4>
+          <p><strong>Total Orders:</strong> {{ report.orderReport.totalOrders }}</p>
+          <p><strong>Total Revenue:</strong> {{ report.orderReport.totalRevenue | currency }}</p>
+          <p><strong>Generated Date:</strong> {{ report.orderReport.generatedDate | date }}</p>
+  
+          <div *ngIf="report.orderReport.orders && report.orderReport.orders.length > 0">
+            <h5>Order Details</h5>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Status</th>
+                  <th>Scheduled Date</th>
+                  <th>Total Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let order of report.orderReport.orders">
+                  <td>{{ order.orderId }}</td>
+                  <td>{{ order.status }}</td>
+                  <td>{{ order.scheduledDate | date }}</td>
+                  <td>{{ order.totalPrice | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+  
+      <div class="card mb-4">
+        <div class="card-body">
+          <h4>Washers Report</h4>
+          <p><strong>Total Washers Revenue:</strong> {{ report.washersReport.totalWashersRevenue | currency }}</p>
+          <p><strong>Generated Date:</strong> {{ report.washersReport.generatedDate | date }}</p>
+  
+          <div *ngIf="report.washersReport.washerReports && report.washersReport.washerReports.length > 0">
+            <h5>Individual Washer Reports</h5>
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Washer ID</th>
+                  <th>Total Orders</th>
+                  <th>Total Revenue</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let washerReport of report.washersReport.washerReports">
+                  <td>{{ washerReport.washerId }}</td>
+                  <td>{{ washerReport.totalOrders }}</td>
+                  <td>{{ washerReport.totalRevenue | currency }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="!report" class="container mt-4">
+      <p>Loading reports...</p>
+    </div>
+  </div>
+  

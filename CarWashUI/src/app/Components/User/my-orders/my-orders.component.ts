@@ -34,7 +34,7 @@ export class MyOrdersComponent implements OnInit {
       paymentType: ['', [Validators.required, Validators.maxLength(100)]],
       orderId: ['', Validators.required],
       userId: ['', Validators.required],
-      recepitId: ['', Validators.required],
+      receiptId: ['', Validators.required],
       status: ['']
     });
 
@@ -73,7 +73,7 @@ export class MyOrdersComponent implements OnInit {
       orderId: order.orderId,
       userId: order.userId,
       status: order.status,
-      recepitId: order.receiptId
+      receiptId: order.receiptId
     });
   }
 

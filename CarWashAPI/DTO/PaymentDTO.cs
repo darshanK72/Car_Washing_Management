@@ -18,7 +18,7 @@ namespace CarWashAPI.DTO
         [Required]
         [MaxLength(100)]
         public string? PaymentType { get; set; }
-        public int? RecepitId { get; set; }
+        public int? ReceiptId { get; set; }
 
         public int? UserId { get; set; }
 

@@ -55,7 +55,7 @@ namespace CarWashAPI.Repository
                     ScheduledDate = order.ScheduledDate,
                     ActualWashDate = order.ActualWashDate,
                     TotalPrice = order.TotalPrice,
-                    RecepitId = order.ReceiptId,
+                    ReceiptId = order.ReceiptId,
                     Notes = order.Notes
                 };
 

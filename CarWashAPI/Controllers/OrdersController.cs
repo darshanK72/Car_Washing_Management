@@ -34,7 +34,7 @@ namespace CarWash2.Controllers
                 ScheduledDate = orderDto.ScheduledDate,
                 ActualWashDate = orderDto.ActualWashDate,
                 TotalPrice = orderDto.TotalPrice,
-                ReceiptId = orderDto.RecepitId,
+                ReceiptId = orderDto.ReceiptId,
                 Notes = orderDto.Notes
             };
         }
@@ -60,7 +60,6 @@ namespace CarWash2.Controllers
             {
                 var orders = await _orderRepository.GetAllOrdersAsync();
 
-                // Map Order to OrderDTO
                 var orderDTOs = new List<OrderDTO>();
                 foreach (var order in orders)
                 {
@@ -75,7 +74,7 @@ namespace CarWash2.Controllers
                         ScheduledDate = order.ScheduledDate,
                         ActualWashDate = order.ActualWashDate,
                         TotalPrice = order.TotalPrice,
-                        RecepitId = order.ReceiptId,
+                        ReceiptId = order.ReceiptId,
                         Notes = order.Notes
                     };
 
@@ -94,6 +93,7 @@ namespace CarWash2.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
 
         [HttpGet("user/receipt/{UserId}")]
         public async Task<ActionResult<Car>> GetReceiptsByUserId(int UserId)
@@ -114,16 +114,16 @@ namespace CarWash2.Controllers
         }
 
         [HttpGet("user/{UserId}")]
-        public async Task<ActionResult<Car>> GetOrdersByUserId(int UserId)
+        public async Task<ActionResult<Order>> GetOrdersByUserId(int UserId)
         {
             try
             {
-                var car = await _orderRepository.GetOrdersByUserId(UserId);
-                if (car == null)
+                var order = await _orderRepository.GetOrdersByUserId(UserId);
+                if (order == null)
                 {
                     return NotFound();
                 }
-                return Ok(car);
+                return Ok(order);
             }
             catch (Exception ex)
             {
@@ -162,7 +162,7 @@ namespace CarWash2.Controllers
                     ScheduledDate = order.ScheduledDate,
                     ActualWashDate = order.ActualWashDate,
                     TotalPrice = order.TotalPrice,
-                    RecepitId = order.ReceiptId,
+                    ReceiptId = order.ReceiptId,
                     Notes = order.Notes
                 };
 
@@ -204,7 +204,7 @@ namespace CarWash2.Controllers
                     ScheduledDate = createdOrder.ScheduledDate,
                     ActualWashDate = createdOrder.ActualWashDate,
                     TotalPrice = createdOrder.TotalPrice,
-                    RecepitId = createdOrder.ReceiptId,
+                    ReceiptId = createdOrder.ReceiptId,
                     Notes = createdOrder.Notes
                 };
 

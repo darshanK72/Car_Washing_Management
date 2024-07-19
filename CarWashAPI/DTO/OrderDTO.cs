@@ -16,7 +16,7 @@ namespace CarWashAPI.DTO
         public int WasherId { get; set; }
 
         [Required(ErrorMessage = "Receipt ID is required.")]
-         public int? RecepitId { get; set; }
+         public int? ReceiptId { get; set; }
 
         [Required(ErrorMessage = "Car ID is required.")]
         public int CarId { get; set; }

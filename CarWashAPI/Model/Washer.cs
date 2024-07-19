@@ -31,6 +31,8 @@ namespace CarWashAPI.Model
         [Url]
         public string? ProfilePicture { get; set; }
 
+        public bool? IsActive {  get; set; }
+
         [StringLength(200)]
         public string? Address { get; set; }
 

@@ -22,5 +22,7 @@ namespace CarWash2.DTO
         [Phone(ErrorMessage = "Invalid phone number.")]
         public string PhoneNumber { get; set; }
 
+        public bool? IsActive { get; set; }
+
     }
 }

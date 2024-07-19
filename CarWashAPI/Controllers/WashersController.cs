@@ -28,7 +28,8 @@ namespace CarWashAPI.Controllers
                 Name = washer.Name,
                 Email = washer.Email,
                 Password = washer.Password,
-                PhoneNumber = washer.PhoneNumber
+                PhoneNumber = washer.PhoneNumber,
+                IsActive = washer.IsActive
             };
         }
 
@@ -40,7 +41,8 @@ namespace CarWashAPI.Controllers
                 Name = washerDto.Name,
                 Email = washerDto.Email,
                 Password = washerDto.Password,
-                PhoneNumber = washerDto.PhoneNumber
+                PhoneNumber = washerDto.PhoneNumber,
+                IsActive = washerDto.IsActive
             };
         }
 

@@ -17,6 +17,9 @@
                         <a class="nav-link" routerLink="/profile" [routerLinkActive]="'active'">Profile</a>
                     </li>
                     <li class="nav-item" *ngIf="(isLoggedIn$  | async) as isLoggedIn">
+                        <a class="nav-link" routerLink="/leaderboard" [routerLinkActive]="'active'">Leaderboard</a>
+                    </li>
+                    <li class="nav-item" *ngIf="(isLoggedIn$  | async) as isLoggedIn">
                          <button class="nav-link" (click)="logout()">Logout</button>
                     </li>
                     <li class="nav-item" *ngIf="!(isLoggedIn$ | async) as isLoggedIn">

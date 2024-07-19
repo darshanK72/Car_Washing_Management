@@ -18,8 +18,17 @@ import { BookWashComponent } from './Components/User/book-wash/book-wash.compone
 import { MyOrdersComponent } from './Components/User/my-orders/my-orders.component';
 import { ReceiptsComponent } from './Components/User/receipts/receipts.component';
 import { MyReviewsComponent } from './Components/User/my-reviews/my-reviews.component';
-import { LeaderboardComponent } from './Components/User/leaderboard/leaderboard.component';
 import { MyCarsComponent } from './Components/User/my-cars/my-cars.component';
+import { UserManagementComponent } from './Components/Admin/user-management/user-management.component';
+import { WasherManagementComponent } from './Components/Admin/washer-management/washer-management.component';
+import { ReportsComponent } from './Components/Admin/reports/reports.component';
+import { OrderManagementComponent } from './Components/Admin/order-management/order-management.component';
+import { UserDetailsComponent } from './Components/Admin/user-management/user-details/user-details.component';
+import { WasherDetailsComponent } from './Components/Admin/washer-management/washer-details/washer-details.component';
+import { AddWasherComponent } from './Components/Admin/washer-management/add-washer/add-washer.component';
+import { EditWasherComponent } from './Components/Admin/washer-management/edit-washer/edit-washer.component';
+import { OrderDetailsComponent } from './Components/Admin/order-management/order-details/order-details.component';
+import { LeaderboardComponent } from './Components/Auth/leaderboard/leaderboard.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +48,15 @@ import { MyCarsComponent } from './Components/User/my-cars/my-cars.component';
     MyReviewsComponent,
     LeaderboardComponent,
     MyCarsComponent,
+    UserManagementComponent,
+    WasherManagementComponent,
+    ReportsComponent,
+    OrderManagementComponent,
+    UserDetailsComponent,
+    WasherDetailsComponent,
+    AddWasherComponent,
+    EditWasherComponent,
+    OrderDetailsComponent,
   ],
   imports: [
     BrowserModule,
