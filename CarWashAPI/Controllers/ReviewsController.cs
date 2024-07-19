@@ -128,7 +128,6 @@ namespace CarWash2.Controllers
         }
 
         [HttpGet("washer/{washerId}")]
-        [Authorize(Policy = "RequireOwnerRole")]
         public async Task<ActionResult<IEnumerable<ReviewDto>>> GetReviewsByWasherId(int washerId)
         {
             try

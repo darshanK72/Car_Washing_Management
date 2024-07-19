@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CarWash2.DTO;
+using CarWashAPI.Repository;
 
 namespace CarWashAPI.Controllers
 {
@@ -150,5 +151,57 @@ namespace CarWashAPI.Controllers
                 return StatusCode(500, "This Washer Id Have a Pending order So this washer profile Cannot be deleted");
             }
         }
+
+        [HttpPost("accept-order/{orderId}")]
+        public async Task<IActionResult> AcceptOrder(int orderId)
+        {
+            var result = await _washerRepository.AcceptOrderAsync(orderId);
+            if (result)
+            {
+                return Ok("Order accepted.");
+            }
+            return NotFound("Order not found or already processed.");
+        }
+
+        [HttpPost("reject-order/{orderId}")]
+        public async Task<IActionResult> RejectOrder(int orderId)
+        {
+            var result = await _washerRepository.RejectOrderAsync(orderId);
+            if (result)
+            {
+                return Ok("Order rejected.");
+            }
+            return NotFound("Order not found or already processed.");
+        }
+
+        [HttpGet("{washerId}/washing-requests")]
+        public async Task<ActionResult<IEnumerable<WashRequest>>> GetWashingRequests(int washerId)
+        {
+            try
+            {
+                var washRequests = await _washerRepository.GetWashingRequests(washerId);
+
+                return Ok(washRequests);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+        [HttpGet("{washerId}/orders")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetAllWasherOrders(int washerId)
+        {
+            try
+            {
+                var orders = await _washerRepository.GetAllWasherOrders(washerId);
+                return Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error" + ex.Message);
+            }
+        }
+
     }
 }

@@ -37,9 +37,9 @@ namespace CarWashAPI.Model
         public string? Address { get; set; }
 
         [JsonIgnore]
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<Order>? Orders { get; set; }
 
         [JsonIgnore]
-        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Review>? Reviews { get; set; }
     }
 }

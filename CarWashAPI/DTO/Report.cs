@@ -25,7 +25,7 @@ namespace CarWashAPI.DTO
 
     public class IndividualWasherReport
     {
-        public int WasherId { get; set; }
+        public int? WasherId { get; set; }
         public int TotalOrders { get; set; }
         public double TotalRevenue { get; set; }
     }

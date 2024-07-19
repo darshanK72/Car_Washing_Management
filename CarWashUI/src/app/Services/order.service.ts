@@ -19,9 +19,15 @@ export class OrderService {
     return this.http.get<any>(`${this.apiUrl}/${orderId}`);
   }
 
+  getUserByOrderId(orderId:number):Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}/userOrder/${orderId}`);
+  }
 
+  getWasherByOrderId(orderId:number):Observable<any>{
+    return this.http.get<any>(`${this.apiUrl}/washer/${orderId}`);
+  }
   getOrderByUserId(userId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/user/${userId}`);
+    return this.http.get<any>(`${this.apiUrl}/userOrder/${userId}`);
   }
 
   getReceiptsByUserId(userId: number): Observable<any> {

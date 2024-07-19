@@ -27,6 +27,10 @@ import { AddWasherComponent } from './Components/Admin/washer-management/add-was
 import { EditWasherComponent } from './Components/Admin/washer-management/edit-washer/edit-washer.component';
 import { OrderDetailsComponent } from './Components/Admin/order-management/order-details/order-details.component';
 import { LeaderboardComponent } from './Components/Auth/leaderboard/leaderboard.component';
+import { AddPackageComponent } from './Components/Admin/add-package/add-package.component';
+import { WashRequestComponent } from './Components/Washer/wash-request/wash-request.component';
+import { WashOrdersComponent } from './Components/Washer/wash-orders/wash-orders.component';
+import { UserReviewsComponent } from './Components/Washer/user-reviews/user-reviews.component';
 
 const routes: Routes = [
   {
@@ -98,6 +102,23 @@ const routes: Routes = [
     path: 'washer',
     component: WasherComponent,
     canActivate: [AuthGuard, WasherGuard],
+    children: [
+      {
+        path: 'wash-request',
+        component: WashRequestComponent,
+        canActivate: [AuthGuard, WasherGuard],
+      },
+      {
+        path: 'wash-orders',
+        component: WashOrdersComponent,
+        canActivate: [AuthGuard, WasherGuard],
+      },
+      {
+        path: 'user-reviews',
+        component: UserReviewsComponent,
+        canActivate: [AuthGuard, WasherGuard],
+      },
+    ],
   },
   {
     path: 'admin',
@@ -147,7 +168,7 @@ const routes: Routes = [
             path: 'order-details/:id',
             component: OrderDetailsComponent,
             canActivate: [AuthGuard, AdminGuard],
-          },
+          }
         ],
       },
       {
@@ -158,6 +179,11 @@ const routes: Routes = [
       {
         path: 'leaderboard',
         component: LeaderboardComponent,
+        canActivate: [AuthGuard, AdminGuard],
+      },
+      {
+        path: 'add-package',
+        component: AddPackageComponent,
         canActivate: [AuthGuard, AdminGuard],
       },
     ],

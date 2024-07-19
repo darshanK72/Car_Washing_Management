@@ -13,7 +13,7 @@ namespace CarWashAPI.Model
         public int OrderId { get; set; }
 
         [Required]
-        public string Status { get; set; }
+        public string? Status { get; set; }
 
         [Required]
         public DateTime? ScheduledDate { get; set; }
@@ -24,45 +24,39 @@ namespace CarWashAPI.Model
         [Required]
         public decimal TotalPrice { get; set; }
 
-        public string Notes { get; set; }
+        public string? Notes { get; set; }
 
-        [Required]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         [ForeignKey("UserId")]
         [JsonIgnore]
-        public User User { get; set; }
+        public User? User { get; set; }
 
-        [Required]
-        public int WasherId { get; set; }
+        public int? WasherId { get; set; }
 
         [ForeignKey("WasherId")]
         [JsonIgnore]
-        public Washer Washer { get; set; }
+        public Washer? Washer { get; set; }
 
-        [Required]
-        public int CarId { get; set; }
+        public int? CarId { get; set; }
 
         [ForeignKey("CarId")]
         [JsonIgnore]
-        public Car Car { get; set; }
+        public Car? Car { get; set; }
         public int? ReceiptId { get; set; }
 
         [ForeignKey("ReceiptId")]
         [JsonIgnore]
-        public Receipt Receipt { get; set; }
+        public Receipt? Receipt { get; set; }
         public int? PaymentId { get; set; }
 
         [ForeignKey("PaymentId")]
         [JsonIgnore]
-        public Payment Payment { get; set; }
-
-
-        [Required]
-        public int PackageId { get; set; }
+        public Payment? Payment { get; set; }
+        public int? PackageId { get; set; }
 
         [ForeignKey("PackageId")]
         [JsonIgnore]
-        public Package Package { get; set; }
+        public Package? Package { get; set; }
     }
 }

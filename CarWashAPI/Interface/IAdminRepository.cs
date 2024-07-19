@@ -26,5 +26,6 @@ namespace CarWashAPI.Interface
         Task<Review> GetReviewByOrderIdAsync(int orderId);
         Task<IEnumerable<Washer>> GetLeaderboardAsync();
         Task<Report> GenerateReportsAsync(DateTime startDate, DateTime endDate);
+        Task<bool> AssignWasherToOrder(int orderId, int washerId);
     }
 }

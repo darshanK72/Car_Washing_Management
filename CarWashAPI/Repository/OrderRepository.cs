@@ -9,11 +9,13 @@ namespace CarWashAPI.Repository
     public class OrderRepository : IOrderRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailRepository _emailRepository;
         private readonly IReviewRepository _reviewRepository;
-        public OrderRepository(ApplicationDbContext context,IReviewRepository  reviewRepository)
+        public OrderRepository(ApplicationDbContext context,IReviewRepository  reviewRepository,IEmailRepository emailRepository)
         {
             _context = context;
             _reviewRepository = reviewRepository;
+            _emailRepository = emailRepository;
         }
 
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()
@@ -91,7 +93,7 @@ namespace CarWashAPI.Repository
 
         public async Task<Order> CompletePaymentAsync(PaymentDTO paymentDTO)
         {
-            var order = await _context.Orders
+            var order = await _context.Orders.Include(o => o.Washer)
                 .FirstOrDefaultAsync(r => r.OrderId == paymentDTO.OrderId);
 
             if (order == null)
@@ -123,8 +125,13 @@ namespace CarWashAPI.Repository
             order.Receipt = recepit;
             order.Status = "Completed";
             recepit.Status = "Paid";
+            recepit.PaymentMethod = paymentDTO.PaymentType;
 
             await _context.SaveChangesAsync();
+
+            await _emailRepository.NotifyWasherPaymentSuccess(order.Washer.Email, order.OrderId);
+            await _emailRepository.NotifyUserOnServiceUpdate(user.Email, order.Washer.Name, "Completed");
+            await _emailRepository.NotifyUserOnReceipt(user.Email, recepit.ReceiptId);
 
             return order;
         }
@@ -199,15 +206,12 @@ namespace CarWashAPI.Repository
                 throw new ArgumentException("Invalid Receipt ID");
             }
 
-            var washer = orderDto.ScheduleNow ? await AssignRandomWasherAsync() : null;
-
             var order = new Order
             {
                 UserId = orderDto.UserId,
                 CarId = orderDto.CarId,
                 PackageId = orderDto.PackageId,
-                WasherId = washer?.WasherId ?? 0,
-                Status = orderDto.ScheduleNow ? "Assigned" : "Scheduled",
+                Status = "Created",
                 ScheduledDate = orderDto.ScheduleNow ? DateTime.Now : orderDto.ScheduledDate,
                 TotalPrice = package.Price,
                 Notes = orderDto.Notes,

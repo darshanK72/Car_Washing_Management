@@ -9,6 +9,7 @@ namespace CarWashAPI.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PaymentId { get; set; }
 
+        [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; }
 
@@ -22,7 +23,6 @@ namespace CarWashAPI.Model
 
         [ForeignKey(nameof(ReceiptId))]
         public Receipt? Receipt { get; set; }
-
         public int? UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]

@@ -1,0 +1,37 @@
+<div class="container mt-4" *ngIf="isThereWashRequests">
+    <h2>Wash Requests</h2>
+    <!-- Wash Request Table -->
+    <table class="table table-striped mt-4">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Order ID</th>
+          <th>Address</th>
+          <th>Amount</th>
+          <th>Notes</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let request of washRequests; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ request.orderId }}</td>
+          <td>{{ request.address }}</td>
+          <td>{{request.notes}}</td>
+          <td>{{ request.totalPrice | currency }}</td>
+          <td>
+            <ng-container *ngIf="request.status === 'Assigned'">
+              <button class="btn btn-success me-2" (click)="acceptOrder(request.orderId)">Accept</button>
+              <button class="btn btn-danger" (click)="rejectOrder(request.orderId)">Reject</button>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="container mt-4" *ngIf="!isThereWashRequests">
+    <div>
+      <h2>No Wash Request Found</h2>
+    </div>
+  </div>
+  

@@ -1,41 +1,73 @@
 <div class="container mt-4">
-    <h2>Order Management</h2>
-    <div class="form-group">
-      <label for="status">Filter by Status:</label>
-      <select class="form-control" id="status" [(ngModel)]="selectedStatus" (change)="onStatusChange($event)">
-        <option value="pending">All</option>
-        <option value="pending">Pending</option>
-        <option value="accepted">Accepted</option>
-        <option value="under-process">Under Process</option>
-        <option value="completed">Completed</option>
-        <option value="cancelled">Cancelled</option>
-      </select>      
-    </div>
-  
-    <table class="table table-striped mt-4">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Order ID</th>
-          <th>Status</th>
-          <th>Scheduled Date</th>
-          <th>Actual Wash Date</th>
-          <th>Total Price</th>
-          <th>Details</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let order of orders; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ order.orderId }}</td>
-          <td>{{ order.status }}</td>
-          <td>{{ order.scheduledDate | date }}</td>
-          <td>{{ order.actualWashDate | date }}</td>
-          <td>{{ order.totalPrice | currency }}</td>
-          <td><a [routerLink]="['/admin/order-management/order-details', order.orderId]">View</a></td>
-        </tr>
-      </tbody>
-    </table>
-    <router-outlet></router-outlet>
+  <h2>Order Management</h2>
+  <div class="form-group">
+    <label for="status">Filter by Status:</label>
+    <select class="form-control" id="status" [(ngModel)]="selectedStatus" (change)="onStatusChange($event)">
+      <option value="">All</option>
+      <option value="pending">Pending</option>
+      <option value="accepted">Accepted</option>
+      <option value="under-process">Under Process</option>
+      <option value="completed">Completed</option>
+      <option value="cancelled">Cancelled</option>
+    </select>
   </div>
+
+  <table class="table table-striped mt-4">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Order ID</th>
+        <th>Status</th>
+        <th>Scheduled Date</th>
+        <th>Actual Wash Date</th>
+        <th>Total Price</th>
+        <th>Details</th>
+        <th>Assign Washer</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ order.orderId }}</td>
+        <td>{{ order.status }}</td>
+        <td>{{ order.scheduledDate | date }}</td>
+        <td>{{ order.actualWashDate | date }}</td>
+        <td>{{ order.totalPrice | currency }}</td>
+        <td><a [routerLink]="['/admin/order-management/order-details', order.orderId]">View</a></td>
+        <td>
+          <button class="btn btn-success" *ngIf="order.status == 'Completed'">Order Completed by Washer</button>
+          <button class="btn btn-success" *ngIf="order.status == 'Assigned'">Assigned to Washer</button>
+          <button class="btn btn-success" *ngIf="order.status == 'Accepted'">Accepted by Washer</button>
+          <button class="btn btn-primary"
+            *ngIf="order.status != 'Assigned' && order.status != 'Completed' && order.status != 'Accepted'"
+            (click)="assignWasherToOrder(order.orderId)">Assign Washer</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
   
+  <router-outlet></router-outlet>
+
+  <div *ngIf="showAssignForm" class="card p-2 mb-3">
+    <div class="card-body">
+      <h2>Assign Washer to Order</h2>
+      <form [formGroup]="assignForm" (ngSubmit)="assignWasher()">
+        <div class="form-group">
+          <label for="washerId">Select Washer</label>
+          <select id="washerId" formControlName="washerId" class="form-control">
+            <option value="" disabled>Select a washer</option>
+            <option *ngFor="let washer of washers" [value]="washer.washerId">
+              {{ washer.name }}
+            </option>
+          </select>
+          <div *ngIf="assignForm.controls['washerId']!.invalid && assignForm.controls['washerId']!.touched"
+            class="text-danger">
+            Please select a washer.
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary me-2">Assign Washer</button>
+        <button type="button" class="btn btn-secondary" (click)="closeAssignForm()">Cancel</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -288,4 +288,21 @@ public class AdminsController : ControllerBase
         }
         return Ok(report);
     }
+
+    [HttpPut("orders/{orderId}/assign-washer/{washerId}")]
+    public async Task<ActionResult> AssignWasherToOrder(int orderId, int washerId)
+    {
+        try
+        {
+            var result = await _adminRepository.AssignWasherToOrder(orderId, washerId);
+            if (result)
+                return Ok();
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "Internal server error" + ex.Message);
+        }
+    }
+
 }

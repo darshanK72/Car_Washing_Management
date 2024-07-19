@@ -28,5 +28,12 @@ namespace CarWashAPI.Repository
         {
             return await _context.Users.FindAsync(UserId);
         }
+
+        public async Task<User> GetUserByOrderIdAsync(int OrderId)
+        {
+            var order = await _context.Orders.FindAsync(OrderId);
+            var user = await _context.Users.FindAsync(order.UserId);
+            return user;
+        }
     }
 }

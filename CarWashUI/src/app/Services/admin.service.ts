@@ -7,18 +7,25 @@ import { Review } from '../Models/review.model';
 import { Report } from '../Models/report.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AdminService {
   private apiUrl = 'https://localhost:7152/api/Admins';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getAllOrders(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/orders`);
   }
 
-  generateReport(orderNumber?: string, washerName?: string, type?: string, service?: string, startDate?: Date, endDate?: Date): Observable<string> {
+  generateReport(
+    orderNumber?: string,
+    washerName?: string,
+    type?: string,
+    service?: string,
+    startDate?: Date,
+    endDate?: Date
+  ): Observable<string> {
     let params = new HttpParams();
     if (orderNumber) params = params.set('orderNumber', orderNumber);
     if (washerName) params = params.set('washerName', washerName);
@@ -27,7 +34,10 @@ export class AdminService {
     if (startDate) params = params.set('startDate', startDate.toISOString());
     if (endDate) params = params.set('endDate', endDate.toISOString());
 
-    return this.http.get(`${this.apiUrl}/report`, { params, responseType: 'text' });
+    return this.http.get(`${this.apiUrl}/report`, {
+      params,
+      responseType: 'text',
+    });
   }
 
   getUsers(): Observable<any[]> {
@@ -62,13 +72,16 @@ export class AdminService {
     return this.http.get<any[]>(`${this.apiUrl}/user/${userId}/reviews`);
   }
 
-
   exportWasherReport(washerId: number): Observable<string> {
-    return this.http.get(`${this.apiUrl}/washers/${washerId}/report`, { responseType: 'text' });
+    return this.http.get(`${this.apiUrl}/washers/${washerId}/report`, {
+      responseType: 'text',
+    });
   }
 
   getFilteredOrders(status: string): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/orders/filtered`, { params: { status } });
+    return this.http.get<any[]>(`${this.apiUrl}/orders/filtered`, {
+      params: { status },
+    });
   }
 
   getAllUserOrders(userId: number): Observable<any[]> {
@@ -101,5 +114,12 @@ export class AdminService {
       .set('endDate', endDate.toISOString());
 
     return this.http.get<Report>(`${this.apiUrl}/report`, { params });
+  }
+
+  assignWasherToOrder(orderId: number, washerId: number): Observable<void> {
+    return this.http.put<void>(
+      `${this.apiUrl}/orders/${orderId}/assign-washer/${washerId}`,
+      {}
+    );
   }
 }

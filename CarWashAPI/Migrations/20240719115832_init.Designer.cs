@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarWashAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240719050213_init2")]
-    partial class init2
+    [Migration("20240719115832_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,7 +75,6 @@ namespace CarWashAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarId"));
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LicensePlate")
@@ -93,7 +92,7 @@ namespace CarWashAPI.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("Year")
@@ -118,14 +117,13 @@ namespace CarWashAPI.Migrations
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CarId")
+                    b.Property<int?>("CarId")
                         .HasColumnType("int");
 
                     b.Property<string>("Notes")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PackageId")
+                    b.Property<int?>("PackageId")
                         .HasColumnType("int");
 
                     b.Property<int?>("PaymentId")
@@ -145,10 +143,10 @@ namespace CarWashAPI.Migrations
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WasherId")
+                    b.Property<int?>("WasherId")
                         .HasColumnType("int");
 
                     b.HasKey("OrderId");
@@ -178,7 +176,8 @@ namespace CarWashAPI.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -384,9 +383,7 @@ namespace CarWashAPI.Migrations
                 {
                     b.HasOne("CarWashAPI.Model.User", "User")
                         .WithMany("Cars")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -395,15 +392,11 @@ namespace CarWashAPI.Migrations
                 {
                     b.HasOne("CarWashAPI.Model.Car", "Car")
                         .WithMany("Orders")
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CarId");
 
                     b.HasOne("CarWashAPI.Model.Package", "Package")
                         .WithMany("Orders")
-                        .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PackageId");
 
                     b.HasOne("CarWashAPI.Model.Payment", "Payment")
                         .WithMany()
@@ -415,15 +408,11 @@ namespace CarWashAPI.Migrations
 
                     b.HasOne("CarWashAPI.Model.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.HasOne("CarWashAPI.Model.Washer", "Washer")
                         .WithMany("Orders")
-                        .HasForeignKey("WasherId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("WasherId");
 
                     b.Navigation("Car");
 

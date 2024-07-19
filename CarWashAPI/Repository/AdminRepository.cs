@@ -12,10 +12,12 @@ namespace CarWashAPI.Repository
     public class AdminRepository : IAdminRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly IEmailRepository _emailRepository;
 
-        public AdminRepository(ApplicationDbContext context)
+        public AdminRepository(ApplicationDbContext context, IEmailRepository emailRepository)
         {
             _context = context;
+            _emailRepository = emailRepository;
         }
 
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()
@@ -235,5 +237,25 @@ namespace CarWashAPI.Repository
 
             return report;
         }
+
+        public async Task<bool> AssignWasherToOrder(int orderId, int washerId)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null)
+                return false;
+
+            var washer = await _context.Washers.FindAsync(washerId);
+            if (washer == null)
+                return false;
+
+            order.WasherId = washerId;
+            order.Status = "Assigned";
+
+            await _context.SaveChangesAsync();
+
+            await _emailRepository.NotifyWasherNewOrder(washer.Email, order.OrderId);
+            return true;
+        }
+
     }
 }

@@ -15,11 +15,15 @@ namespace CarWash2.Controllers
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IReviewRepository _reviewRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IEmailRepository _emailRepository;
 
-        public OrdersController(IOrderRepository orderRepository,IReviewRepository reviewRepository)
+        public OrdersController(IOrderRepository orderRepository,IReviewRepository reviewRepository, IUserRepository userRepository,IEmailRepository emailRepository)
         {
             _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
             _reviewRepository = reviewRepository;
+            _userRepository = userRepository;
+            _emailRepository = emailRepository;
         }
 
         private Order MapDtoToModel(OrderDTO orderDto)
@@ -113,7 +117,7 @@ namespace CarWash2.Controllers
             }
         }
 
-        [HttpGet("user/{UserId}")]
+        [HttpGet("userOrder/{UserId}")]
         public async Task<ActionResult<Order>> GetOrdersByUserId(int UserId)
         {
             try
@@ -124,6 +128,24 @@ namespace CarWash2.Controllers
                     return NotFound();
                 }
                 return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("user/{OrderId}")]
+        public async Task<ActionResult<Order>> GetUserByOrderId(int OrderId)
+        {
+            try
+            {
+                var user = await _userRepository.GetUserByOrderIdAsync(OrderId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                return Ok(user);
             }
             catch (Exception ex)
             {

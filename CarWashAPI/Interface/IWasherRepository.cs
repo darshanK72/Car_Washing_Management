@@ -1,4 +1,5 @@
-﻿using CarWashAPI.Model;
+﻿using CarWashAPI.DTO;
+using CarWashAPI.Model;
 
 namespace CarWashAPI.Interface
 {
@@ -9,5 +10,9 @@ namespace CarWashAPI.Interface
         Task<Washer> AddWasherAsync(Washer washer);
         Task<Washer> UpdateWasherAsync(Washer washer);
         Task<bool> DeleteWasherAsync(int washerId);
+        Task<bool> AcceptOrderAsync(int orderId);
+        Task<bool> RejectOrderAsync(int orderId);
+        Task<IEnumerable<WashRequest>> GetWashingRequests(int washerId);
+        Task<IEnumerable<Order>> GetAllWasherOrders(int washerId);
     }
 }

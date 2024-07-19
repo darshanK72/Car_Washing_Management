@@ -12,30 +12,28 @@ namespace CarWashAPI.Model
 
         [Required]
         [StringLength(50)]
-        public string Make { get; set; }
+        public string? Make { get; set; }
 
         [Required]
         [StringLength(50)]
-        public string Model { get; set; }
+        public string? Model { get; set; }
 
         [Required]
         public int Year { get; set; }
 
         [Required]
         [StringLength(20)]
-        public string LicensePlate { get; set; }
+        public string? LicensePlate { get; set; }
 
         [Url]
-        public string ImageUrl { get; set; }
-
-        [Required]
-        public int UserId { get; set; }
+        public string? ImageUrl { get; set; }
+        public int? UserId { get; set; }
 
         [ForeignKey("UserId")]
         [JsonIgnore]
-        public User User { get; set; }
+        public User? User { get; set; }
 
         [JsonIgnore]
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<Order>? Orders { get; set; }
     }
 }
