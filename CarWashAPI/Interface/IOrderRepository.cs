@@ -14,8 +14,8 @@ namespace CarWashAPI.Interface
         Task<List<OrderDTO>> GetOrdersByUserId(int userId);
         Task<bool> DeleteOrderAsync(int orderId);
         Task<Package> GetPackageByIdAsync(int id);
-        Task<Receipt> CreateReceiptAsync(decimal amount);
-        Task<Order> PlaceOrderAsync(PlaceOrderDTO orderDto, int receiptId);
+        Task<Receipt> CreateReceiptAsync(Order order, Package package);
+        Task<Order> PlaceOrderAsync(PlaceOrderDTO orderDto);
         Task<List<User>> GetUsersSortedByOrdersAsync();
         Task<Washer> AssignRandomWasherAsync();
     }

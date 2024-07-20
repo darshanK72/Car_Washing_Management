@@ -89,7 +89,7 @@ export class BookWashComponent {
           this.orderForm.reset();
         },
         error => {
-          window.alert('Error placing order');
+          window.alert('Error placing order' + error.error);
         }
       );
     } else {

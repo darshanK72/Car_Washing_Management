@@ -4,7 +4,9 @@ namespace CarWashAPI.DTO
 {
     public class UserDto
     {
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
+        public int? AdminId { get; set; }
+        public int? WasherId { get; set; }
 
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(100, ErrorMessage = "Name can't be longer than 100 characters.")]

@@ -26,13 +26,13 @@ export class MyCarsComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.loadCars();
     this.userId = this.authService.getUserId();
+    this.loadCars();
     this.carForm.patchValue({userId:this.userId});
   }
 
   loadCars(): void {
-    this.carService.getAllCars().subscribe({
+    this.carService.getCarByUserId(this.userId).subscribe({
       next: (data) => this.cars = data,
       error: (error) => console.error('There was an error!', error)
     });

@@ -176,34 +176,38 @@ namespace CarWashAPI.Repository
             return await _context.Packages.FindAsync(id);
         }
 
-        public async Task<Receipt> CreateReceiptAsync(decimal amount)
+        public async Task<Receipt> CreateReceiptAsync(Order order,Package package)
         {
+            
             var receipt = new Receipt
             {
                 WashingDate = DateTime.Now,
-                Amount = amount,
+                Amount = package.Price,
                 TransactionId = Guid.NewGuid().ToString(),
-                Status = "Created"
+                Status = "Not Paid"
             };
 
             _context.Receipts.Add(receipt);
             await _context.SaveChangesAsync();
 
+            order.Receipt = receipt;
+            order.ReceiptId = receipt.ReceiptId;
+
+            await _context.SaveChangesAsync();
             return receipt;
         }
 
-        public async Task<Order> PlaceOrderAsync(PlaceOrderDTO orderDto, int receiptId)
+        public async Task<Order> PlaceOrderAsync(PlaceOrderDTO orderDto)
         {
             var package = await GetPackageByIdAsync(orderDto.PackageId);
-            var receipt = await _context.Receipts.FindAsync(receiptId);
             if (package == null)
             {
                 throw new ArgumentException("Invalid package ID");
             }
 
-            if (receipt == null)
+            if (orderDto.ScheduledDate != null && orderDto.ScheduledDate <= DateTime.Now)
             {
-                throw new ArgumentException("Invalid Receipt ID");
+                throw new ArgumentException("Invalid Schedule Date");
             }
 
             var order = new Order
@@ -214,16 +218,12 @@ namespace CarWashAPI.Repository
                 Status = "Created",
                 ScheduledDate = orderDto.ScheduleNow ? DateTime.Now : orderDto.ScheduledDate,
                 TotalPrice = package.Price,
-                Notes = orderDto.Notes,
-                ReceiptId = receiptId
+                Notes = orderDto.Notes
             };
 
             order.ActualWashDate = order.ScheduledDate;
 
             _context.Orders.Add(order);
-
-            receipt.Status = "Not Paid";
-
             await _context.SaveChangesAsync();
 
             return order;

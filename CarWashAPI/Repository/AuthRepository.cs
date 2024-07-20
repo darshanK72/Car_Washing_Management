@@ -127,13 +127,35 @@ namespace CarWashAPI.Repository
             return await _context.Washers.FirstOrDefaultAsync(w => w.Email == email);
         }
 
-        public async Task<bool> UpdateUserAsync(dynamic user)
+        public async Task<bool> UpdateUserAsync(UserDto userDto)
         {
-            _context.Entry(user).State = EntityState.Modified;
+
             try
             {
-                await _context.SaveChangesAsync();
-                return true;
+                if (userDto.Role == "User")
+                {
+                    var user = await _context.Users.FindAsync(userDto.UserId);
+                    ToUserEntity(userDto,user);
+                    _context.Entry(user).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else if (userDto.Role == "Washer")
+                {
+                    var washer = await _context.Washers.FindAsync(userDto.WasherId);
+                    ToWasherEntity(userDto,washer);
+                    _context.Entry(washer).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    var admin = await _context.Admins.FindAsync(userDto.AdminId);
+                    ToAdminEntity(userDto,admin);
+                    _context.Entry(admin).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
             }
             catch
             {
@@ -186,6 +208,46 @@ namespace CarWashAPI.Repository
         {
             return HashPassword(password) == hashedPassword;
         }
+
+        private Washer ToWasherEntity(UserDto userDto,Washer washer)
+        {
+            washer.WasherId = userDto.WasherId ?? 0;
+            washer.Name = userDto.Name;
+            washer.Email = userDto.Email;
+            washer.Password = userDto.Password;
+            washer.PhoneNumber = userDto.PhoneNumber;
+            washer.ProfilePicture = userDto.ProfilePicture;
+            washer.Address = userDto.Address;
+            washer.Role = userDto.Role;
+            return washer;
+           
+        }
+
+        private Admin ToAdminEntity(UserDto userDto, Admin admin)
+        {
+            admin.Name = userDto.Name;
+            admin.Email = userDto.Email;
+            admin.Password = userDto.Password;
+            admin.PhoneNumber = userDto.PhoneNumber;
+            admin.ProfilePicture = userDto.ProfilePicture;
+            admin.Address = userDto.Address;
+            admin.Role = userDto.Role;
+            return admin;
+        }
+
+        private User ToUserEntity(UserDto userDto, User user)
+        {
+            user.Name = userDto.Name;
+            user.Email = userDto.Email;
+            user.Password = userDto.Password;
+            user.PhoneNumber = userDto.PhoneNumber;
+            user.ProfilePicture = userDto.ProfilePicture;
+            user.Address = userDto.Address;
+            user.Role = userDto.Role;
+            return user;
+
+        }
+
     }
 
     public class RegistrationResult
@@ -193,5 +255,6 @@ namespace CarWashAPI.Repository
         public bool Succeeded { get; set; }
         public string[] Errors { get; set; }
     }
+
 
 }

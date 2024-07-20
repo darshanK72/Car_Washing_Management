@@ -47,7 +47,7 @@ namespace CarWashAPI.Controllers
         {
             return new User
             {
-                UserId = userDto.UserId,
+                UserId = userDto.UserId ?? 0,
                 Name = userDto.Name,
                 Email = userDto.Email,
                 Password = userDto.Password,

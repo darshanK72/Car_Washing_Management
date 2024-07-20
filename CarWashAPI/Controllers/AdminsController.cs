@@ -28,20 +28,6 @@ public class AdminsController : ControllerBase
         }
     }
 
-    //[HttpGet("report")]
-    //public async Task<ActionResult<string>> GenerateReport([FromQuery] string orderNumber, [FromQuery] string washerName, [FromQuery] string type, [FromQuery] string service, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
-    //{
-    //    try
-    //    {
-    //        var report = await _adminRepository.G(orderNumber, washerName, type, service, startDate, endDate);
-    //        return Ok(report);
-    //    }
-    //    catch (Exception)
-    //    {
-    //        return StatusCode(500, "Internal server error");
-    //    }
-    //}
-
     [HttpGet("users")]
     public async Task<ActionResult<IEnumerable<User>>> GetUsers()
     {
@@ -86,6 +72,20 @@ public class AdminsController : ControllerBase
         }
     }
 
+    [HttpGet("user/{userId}/reviews")]
+    public async Task<ActionResult<IEnumerable<Review>>> GetUserReviews(int userId)
+    {
+        try
+        {
+            var reviews = await _adminRepository.GetUserReviewsAsync(userId);
+            return Ok(reviews);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
     [HttpGet("washers")]
     public async Task<ActionResult<IEnumerable<Washer>>> GetWashers()
     {
@@ -93,6 +93,22 @@ public class AdminsController : ControllerBase
         {
             var washers = await _adminRepository.GetWashersAsync();
             return Ok(washers);
+        }
+        catch (Exception)
+        {
+            return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPut("washers/{washerId}/status")]
+    public async Task<ActionResult> UpdateWasherStatus(int washerId, [FromBody] bool isActive)
+    {
+        try
+        {
+            var result = await _adminRepository.UpdateWasherStatusAsync(washerId, isActive);
+            if (result)
+                return Ok();
+            return NotFound();
         }
         catch (Exception)
         {
@@ -146,42 +162,12 @@ public class AdminsController : ControllerBase
         }
     }
 
-    [HttpPut("washers/{washerId}/status")]
-    public async Task<ActionResult> UpdateWasherStatus(int washerId, [FromBody] bool isActive)
-    {
-        try
-        {
-            var result = await _adminRepository.UpdateWasherStatusAsync(washerId, isActive);
-            if (result)
-                return Ok();
-            return NotFound();
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, "Internal server error");
-        }
-    }
-
     [HttpGet("washers/{washerId}/reviews")]
     public async Task<ActionResult<IEnumerable<Review>>> GetWasherReviews(int washerId)
     {
         try
         {
             var reviews = await _adminRepository.GetWasherReviewsAsync(washerId);
-            return Ok(reviews);
-        }
-        catch (Exception)
-        {
-            return StatusCode(500, "Internal server error");
-        }
-    }
-
-    [HttpGet("user/{userId}/reviews")]
-    public async Task<ActionResult<IEnumerable<Review>>> GetUserReviews(int userId)
-    {
-        try
-        {
-            var reviews = await _adminRepository.GetUserReviewsAsync(userId);
             return Ok(reviews);
         }
         catch (Exception)
@@ -215,6 +201,22 @@ public class AdminsController : ControllerBase
         catch (Exception)
         {
             return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPut("orders/{orderId}/assign-washer/{washerId}")]
+    public async Task<ActionResult> AssignWasherToOrder(int orderId, int washerId)
+    {
+        try
+        {
+            var result = await _adminRepository.AssignWasherToOrder(orderId, washerId);
+            if (result)
+                return Ok();
+            return NotFound();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "Internal server error" + ex.Message);
         }
     }
 
@@ -287,22 +289,6 @@ public class AdminsController : ControllerBase
             return NotFound("Washer not found");
         }
         return Ok(report);
-    }
-
-    [HttpPut("orders/{orderId}/assign-washer/{washerId}")]
-    public async Task<ActionResult> AssignWasherToOrder(int orderId, int washerId)
-    {
-        try
-        {
-            var result = await _adminRepository.AssignWasherToOrder(orderId, washerId);
-            if (result)
-                return Ok();
-            return NotFound();
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, "Internal server error" + ex.Message);
-        }
     }
 
 }

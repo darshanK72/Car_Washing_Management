@@ -91,8 +91,43 @@ namespace CarWashAPI.Controllers
         {
             try
             {
-                var user = ToUserEntity(UserDto);
-                var updatedUser = await _authRepository.UpdateUserAsync(user);
+                var updatedUser = await _authRepository.UpdateUserAsync(UserDto);
+                if (updatedUser == null)
+                {
+                    return NotFound();
+                }
+                return Ok(updatedUser);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPut("washer")]
+        public async Task<IActionResult> UpdateWasher(UserDto UserDto)
+        {
+            try
+            {
+                var updatedUser = await _authRepository.UpdateUserAsync(UserDto);
+                if (updatedUser == null)
+                {
+                    return NotFound();
+                }
+                return Ok(updatedUser);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPut("admin")]
+        public async Task<IActionResult> UpdateAdmin(UserDto UserDto)
+        {
+            try
+            {
+                var updatedUser = await _authRepository.UpdateUserAsync(UserDto);
                 if (updatedUser == null)
                 {
                     return NotFound();
@@ -177,7 +212,7 @@ namespace CarWashAPI.Controllers
 
             return new User
             {
-                UserId = userDto.UserId,
+                UserId = userDto.UserId ?? 0,
                 Name = userDto.Name,
                 Email = userDto.Email,
                 Password = userDto.Password,

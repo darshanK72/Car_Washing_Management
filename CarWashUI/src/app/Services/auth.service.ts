@@ -96,6 +96,24 @@ export class AuthService {
     });
   }
 
+  updateWasher(user: User): Observable<User> {
+    const url = `${this.baseUrl}/washer`;
+    return this.http.put<User>(url, user, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
+  updateAdmin(user: User): Observable<User> {
+    const url = `${this.baseUrl}/admin`;
+    return this.http.put<User>(url, user, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    });
+  }
+
   getUserById(id:number) : Observable<User> {
     return this.http.get<User>(`${this.baseUrl}/user/${id}`);
   }

@@ -2,7 +2,8 @@
   <div class="loginForm">
     <!-- Form -->
     <form [formGroup]="loginForm" (ngSubmit)="login()">
-  
+      
+      <p class="text-center py-1 text-danger" *ngIf="isServerError">Invalid Email or Password</p>
       <!-- EMAIL INPUT -->
       <div class="form-group mb-3">
         <label for="email" class="form-label">Email address</label>

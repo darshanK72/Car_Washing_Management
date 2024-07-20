@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { User } from 'src/app/Models/user.model';
 import { AuthService } from 'src/app/Services/auth.service';
@@ -15,7 +15,7 @@ export class ProfileComponent {
   userRoleId!:any;
 
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService,private cdr:ChangeDetectorRef) {
     this.userForm = this.fb.group({
       name: [{ value: '', disabled: true }, Validators.required],
       email: [
@@ -26,6 +26,9 @@ export class ProfileComponent {
       profilePicture: [{ value: '', disabled: true }],
       address: [{ value: '', disabled: true }],
       role: [{ value: '', disabled: true }, Validators.required],
+      userId:[null],
+      adminId:[null],
+      washerId:[null]
     });
   }
 
@@ -37,6 +40,8 @@ export class ProfileComponent {
   getUserProfile(): void {
     this.authService.getUserByRoleAndId(this.userRoleId).subscribe(u => {
       this.user = u;
+      console.log(this.user);
+      this.cdr.markForCheck();
       this.userForm.patchValue(this.user);
     })
   }
@@ -49,17 +54,56 @@ export class ProfileComponent {
   onSubmit(): void {
     if (this.userForm.valid && this.user) {
       const updatedUser: User = { ...this.user, ...this.userForm.value };
-      this.authService.updateUser(updatedUser).subscribe(
-        (response) => {
-          console.log('User updated successfully!', response);
-          this.user = response;
-          this.isEditMode = false;
-          this.userForm.disable();
-        },
-        (error) => {
-          console.error('Error updating user!', error);
-        }
-      );
+      console.log(updatedUser);
+      if(this.user.role == 'User'){
+        this.addUser(updatedUser);
+      }else if(this.user.role == 'Admin'){
+        this.addAdmin(updatedUser);
+      }else{
+        this.addWasher(updatedUser);
+      }
     }
+  }
+
+  addUser(user:any){
+    this.authService.updateUser(user).subscribe(
+      (response) => {
+        console.log('User updated successfully!', response);
+        this.isEditMode = false;
+        this.userForm.disable();
+        this.cdr.markForCheck();
+      },
+      (error) => {
+        console.error('Error updating user!', error);
+      }
+    );
+  }
+
+  addWasher(user:any){
+    this.authService.updateWasher(user).subscribe(
+      (response) => {
+        console.log('User updated successfully!', response);
+        this.isEditMode = false;
+        this.userForm.disable();
+        this.cdr.markForCheck();
+      },
+      (error) => {
+        console.error('Error updating user!', error);
+      }
+    );
+  }
+
+  addAdmin(user:any){
+    this.authService.updateAdmin(user).subscribe(
+      (response) => {
+        console.log('User updated successfully!', response);
+        this.isEditMode = false;
+        this.userForm.disable();
+        this.cdr.markForCheck();
+      },
+      (error) => {
+        console.error('Error updating user!', error);
+      }
+    );
   }
 }

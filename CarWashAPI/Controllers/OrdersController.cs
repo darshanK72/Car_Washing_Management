@@ -211,9 +211,9 @@ namespace CarWash2.Controllers
                     return BadRequest("Invalid package ID");
                 }
 
-                var receipt = await _orderRepository.CreateReceiptAsync(package.Price);
+                var createdOrder = await _orderRepository.PlaceOrderAsync(placeOrderDto);
 
-                var createdOrder = await _orderRepository.PlaceOrderAsync(placeOrderDto, receipt.ReceiptId);
+                var receipt = await _orderRepository.CreateReceiptAsync(createdOrder, package);
 
                 var orderDto = new OrderDTO
                 {

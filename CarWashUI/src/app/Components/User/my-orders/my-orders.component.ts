@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Order } from 'src/app/Models/order.model';
 import { Payment } from 'src/app/Models/payment.model';
@@ -26,7 +26,8 @@ export class MyOrdersComponent implements OnInit {
     private orderService: OrderService,
     private fb: FormBuilder,
     private authService: AuthService,
-    private reviewService: ReviewsService
+    private reviewService: ReviewsService,
+    private cdr:ChangeDetectorRef
   ) {
     this.paymentForm = this.fb.group({
       totalPrice: [{ value: '', disabled: true }, Validators.required],
@@ -57,6 +58,7 @@ export class MyOrdersComponent implements OnInit {
       next: (data) => {
         this.orders = data;
         console.log(data);
+        this.cdr.markForCheck();
       },
       error: (error) => console.error('There was an error!', error)
     });
@@ -92,6 +94,7 @@ export class MyOrdersComponent implements OnInit {
       this.orderService.completePayment(payment).subscribe(() => {
         this.loadOrders();
         this.selectedOrder = null;
+        this.showPaymentForm = false;
         this.paymentForm.reset();
       });
     } else {
